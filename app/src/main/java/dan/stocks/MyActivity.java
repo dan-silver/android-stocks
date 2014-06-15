@@ -57,11 +57,16 @@ public class MyActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
+
+            Stock stocks[] = new Stock[] {
+                    new Stock(55, "Google", "GOOG"),
+                    new Stock(88, "Dell Systems", "Dell"),
+                    new Stock(22, "Samsung", "SMG")
+            };
+
             View view = inflater.inflate(R.layout.fragment_my,container,false);
             GridView gridView = (GridView) view.findViewById(R.id.gridview);
-            String[] stocks = new String[] {
-                    "AAAA", "BBBB", "CCCC", "DDDD", "EEEE"};
-            gridView.setAdapter(new ImageAdapter(view.getContext(), stocks));
+            gridView.setAdapter(new ImageAdapter(view.getContext(), R.layout.grid_element, stocks));
             return view;
         }
     }

@@ -1,56 +1,63 @@
 package dan.stocks;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by dan on 6/14/14.
  */
-public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
-    private final String[] stocks;
+public class ImageAdapter extends ArrayAdapter<Stock> {
 
-    public ImageAdapter(Context c, String[] stocks) {
-        mContext = c;
+    Context context;
+    Stock[] stocks;
+    int layoutResourceId;
+
+    public ImageAdapter(Context context, int layoutResourceId, Stock[] stocks) {
+        super(context, layoutResourceId, stocks);
+        this.context = context;
         this.stocks = stocks;
+        this.layoutResourceId = layoutResourceId;
     }
 
-    public int getCount() {
-        return stocks.length;
-    }
-
-    public Object getItem(int position) {
-        return null;
-    }
-
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    // create a new ImageView for each item referenced by the Adapter
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-      LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View gridView;
-        if (convertView == null) {
-            gridView = inflater.inflate(R.layout.grid_element, null);
-            TextView textView = (TextView) gridView.findViewById(R.id.symbol);
-            textView.setText(stocks[position]);
-        } else {
-            gridView = convertView;
-        }
-        return gridView;
-    }
+        View row = convertView;
+        StockHolder holder = null;
 
+        if(row == null)
+        {
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            row = inflater.inflate(layoutResourceId, parent, false);
+
+            holder = new StockHolder();
+            holder.ticker = (TextView)row.findViewById(R.id.symbol);
+            holder.companyName = (TextView)row.findViewById(R.id.companyName);
+            holder.lastPrice= (TextView)row.findViewById(R.id.lastPrice);
+
+            row.setTag(holder);
+        }
+        else
+        {
+            holder = (StockHolder)row.getTag();
+        }
+
+        Stock s = stocks[position];
+        holder.ticker.setText(s.ticker);
+        holder.companyName.setText(s.companyName);
+        holder.lastPrice.setText(Double.toString(s.lastPrice));
+
+        return row;
+    }
+    static class StockHolder
+    {
+        TextView ticker;
+        TextView companyName;
+        TextView lastPrice;
+    }
 }
