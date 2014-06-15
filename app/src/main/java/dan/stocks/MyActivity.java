@@ -93,7 +93,7 @@ public class MyActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             List<Stock> stocks = new ArrayList<Stock>();
-            for (int i=0;i<100;i++) {
+            for (int i=0;i<4;i++) {
                 double random = new Random().nextDouble();
                 stocks.add(new Stock(upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase()));
             }

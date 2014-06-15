@@ -1,5 +1,11 @@
 package dan.stocks;
 
+import android.util.Log;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 import java.util.Random;
 
 /**
@@ -21,7 +27,15 @@ public class Stock {
     }
 
     void updateStockPrice() {
-        this.lastPrice = new Random().nextDouble() * 100;
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams("symbol", this.ticker);
+        client.get("http://dev.markitondemand.com/Api/v2/Quote/json", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String response) {
+                lastPrice = new Random().nextDouble() * 100;
+                Log.d("STOCK", response);
+            }
+        });
     }
 
 }

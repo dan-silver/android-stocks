@@ -30,7 +30,6 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
 
     public void add(Stock stock) {
         stocks.add(stock);
-        stock.updateStockPrice();
         notifyDataSetChanged();
     }
 
