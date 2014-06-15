@@ -58,7 +58,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         holder.companyName.setText(s.companyName);
         holder.lastPrice.setText(RoundTo2Decimals(s.lastPrice));
         holder.change.setText(RoundTo2Decimals(s.change));
-        holder.changePercent.setText(RoundTo2Decimals(s.changePercent));
+        holder.changePercent.setText("("+RoundTo2Decimals(s.changePercent) + "%)");
 
         return row;
     }

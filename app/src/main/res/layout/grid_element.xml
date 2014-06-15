@@ -2,8 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="200dp"
-    android:gravity="center_horizontal"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#346a93"
     android:padding="12dp">
@@ -12,30 +11,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Verizon Communications"
+        android:id="@+id/companyName"
+        android:layout_gravity="left"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="VZ"
         android:id="@+id/symbol" />
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/lastPrice" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/companyName" />
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="Large Text"
-    android:id="@+id/change" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/changePercent" />
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="49.18"
+            android:textSize="28dp"
+            android:id="@+id/lastPrice"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.14"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/change"
+            android:layout_toRightOf="@id/lastPrice"
+            android:layout_alignBottom="@id/lastPrice"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.29%"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/change"
+            android:layout_alignBottom="@id/lastPrice"
+            android:id="@+id/changePercent" />
+    </RelativeLayout>
+
 </LinearLayout>
