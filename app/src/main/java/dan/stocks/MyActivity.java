@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.GridView;
 
+import java.util.Random;
+
 
 public class MyActivity extends Activity {
 
@@ -53,16 +55,28 @@ public class MyActivity extends Activity {
 
         public PlaceholderFragment() {
         }
-
+        public String randomString(int length) {
+            char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < length; i++) {
+                char c = chars[random.nextInt(chars.length)];
+                sb.append(c);
+            }
+            return sb.toString();
+        }
+        public String upperCaseFirstChar(String s) {
+            return s.substring(0,1).toUpperCase() + s.substring(1);
+        }
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
 
-            Stock stocks[] = new Stock[] {
-                    new Stock(55, "Google", "GOOG"),
-                    new Stock(88, "Dell Systems", "Dell"),
-                    new Stock(22, "Samsung", "SMG")
-            };
+            Stock stocks[] = new Stock[100];
+            for (int i=0;i<100;i++) {
+                double random = new Random().nextDouble();
+                stocks[i] = new Stock((random * 1000), upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase());
+            }
 
             View view = inflater.inflate(R.layout.fragment_my,container,false);
             GridView gridView = (GridView) view.findViewById(R.id.gridview);

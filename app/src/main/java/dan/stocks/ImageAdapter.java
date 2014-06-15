@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by dan on 6/14/14.
  */
@@ -50,9 +52,13 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         Stock s = stocks[position];
         holder.ticker.setText(s.ticker);
         holder.companyName.setText(s.companyName);
-        holder.lastPrice.setText(Double.toString(s.lastPrice));
+        holder.lastPrice.setText(Double.toString(RoundTo2Decimals(s.lastPrice)));
 
         return row;
+    }
+    double RoundTo2Decimals(double val) {
+        DecimalFormat df2 = new DecimalFormat("###.##");
+        return Double.valueOf(df2.format(val));
     }
     static class StockHolder
     {
