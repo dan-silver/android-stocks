@@ -54,7 +54,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         }
 
         Stock s = stocks.get(position);
-        holder.ticker.setText(s.ticker);
+        holder.ticker.setText("(" + s.ticker + ")");
         holder.companyName.setText(s.companyName);
         holder.lastPrice.setText(RoundTo2Decimals(s.lastPrice));
         holder.change.setText(RoundTo2Decimals(s.change));

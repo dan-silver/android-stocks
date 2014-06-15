@@ -4,28 +4,38 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#346a93"
+    android:background="#323232"
     android:padding="12dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/primary_text_dark"
+            android:text="Verizon Communications"
+            android:id="@+id/companyName"
+            android:layout_gravity="left"/>
+        <TextView
+            android:textColor="@android:color/primary_text_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="(VZ)"
+            android:layout_toRightOf="@id/companyName"
+            android:layout_alignBottom="@id/companyName"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/symbol" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Verizon Communications"
-        android:id="@+id/companyName"
-        android:layout_gravity="left"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="VZ"
-        android:id="@+id/symbol" />
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
         <TextView
             android:layout_width="wrap_content"
+            android:textColor="@android:color/primary_text_dark"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="49.18"
@@ -34,6 +44,7 @@
             />
         <TextView
             android:layout_width="wrap_content"
+            android:textColor="@android:color/primary_text_dark"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0.14"
@@ -50,6 +61,7 @@
             android:text="0.29%"
             android:textSize="20dp"
             android:layout_marginLeft="10dp"
+            android:textColor="@android:color/primary_text_dark"
             android:layout_toRightOf="@id/change"
             android:layout_alignBottom="@id/lastPrice"
             android:id="@+id/changePercent" />
