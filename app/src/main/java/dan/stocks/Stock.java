@@ -44,6 +44,7 @@ public class Stock {
                     lastPrice = res.getDouble("LastPrice");
                     change = res.getDouble("Change");
                     changePercent = res.getDouble("ChangePercent");
+                    companyName = res.getString("Name");
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
