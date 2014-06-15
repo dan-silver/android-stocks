@@ -2,6 +2,7 @@ package dan.stocks;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,6 +60,7 @@ public class StockListFragment extends ListFragment {
         if (getFragmentManager().findFragmentById(R.id.stock_detail_fragment) != null) {
             getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         }
+        getListView().setBackgroundColor(Color.parseColor("#323232"));
     }
 
     @Override
