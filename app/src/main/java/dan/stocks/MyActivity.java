@@ -1,37 +1,35 @@
 package dan.stocks;
 
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.media.Image;
+
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 
-public class MyActivity extends Activity {
+public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+        setContentView(R.layout.stocks);
+//        if (savedInstanceState == null) return;
+
+        if (findViewById(R.id.fragment_container) != null) { //single pane
+            // Create an instance of ExampleFragment
+            StockListFragment firstFragment = new StockListFragment();
+
+            // In case this activity was started with special instructions from an Intent,
+            // pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
+        } else { //dual pane
+//            StockListFragment headlines = (StockListFragment) getSupportFragmentManager().findFragmentById(R.id.headlines_fragment);
+//            headlines.createList();
         }
     }
 
@@ -61,49 +59,46 @@ public class MyActivity extends Activity {
     }
 
     private void refreshStocks() {
-        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.container);
-        fragment.refreshStocks();
+//        ((StockListFragment) getFragmentManager().findFragmentById(R.id.container)).refreshStocks();
     }
 
     public void createStock() {
-        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.container);
-        fragment.addStock();
+//        StockListFragment fragment = (StockListFragment) getFragmentManager().findFragmentById(R.id.container);
+//        fragment.addStock();
     }
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        ImageAdapter adapter;
 
-        public PlaceholderFragment() {
-        }
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            List<Stock> stocks = new ArrayList<Stock>();
-            stocks.add(new Stock("MSFT"));
-            stocks.add(new Stock("AAPL"));
-            View view = inflater.inflate(R.layout.fragment_my, container, false);
-            ListView listView = (ListView) view.findViewById(R.id.listview);
-            this.adapter = new ImageAdapter(view.getContext(), R.layout.grid_element, stocks);
-            listView.setAdapter(adapter);
+    @Override
+    public void onStockSelected(int position) {
+        Log.v("STOCKS", "going to detail " + position);
+        // The user selected the headline of an article from the HeadlinesFragment
 
-            //listView.setSelector();
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    Log.d("STOCKS", "" + position);
+        // Capture the article fragment from the activity layout
+        StockDetailFragment articleFrag = (StockDetailFragment) getSupportFragmentManager().findFragmentById(R.id.stock_detail_fragment);
 
-                }
-            });
-            return view;
-        }
+        if (articleFrag != null) {
+            // If article frag is available, we're in two-pane layout...
 
-        public void addStock() {
-            adapter.add("VZ");
-        }
+            // Call a method in the ArticleFragment to update its content
+            articleFrag.updateArticleView(position);
 
-        public void refreshStocks() {
-            adapter.refreshStocks();
+        } else {
+            Log.v("STOCKS", "in one pane layout");
+            // If the frag is not available, we're in the one-pane layout and must swap frags...
+
+            // Create fragment and give it an argument for the selected article
+            StockDetailFragment newFragment = new StockDetailFragment();
+            Bundle args = new Bundle();
+            args.putInt(StockDetailFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
         }
     }
 }
