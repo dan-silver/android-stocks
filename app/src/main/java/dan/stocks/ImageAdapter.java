@@ -36,22 +36,19 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        StockHolder holder = null;
+        StockHolder holder;
 
-        if(row == null)
-        {
+        if(row == null) {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
 
             holder = new StockHolder();
-            holder.ticker = (TextView)row.findViewById(R.id.symbol);
-            holder.companyName = (TextView)row.findViewById(R.id.companyName);
-            holder.lastPrice= (TextView)row.findViewById(R.id.lastPrice);
+            holder.ticker = (TextView) row.findViewById(R.id.symbol);
+            holder.companyName = (TextView) row.findViewById(R.id.companyName);
+            holder.lastPrice= (TextView) row.findViewById(R.id.lastPrice);
 
             row.setTag(holder);
-        }
-        else
-        {
+        } else {
             holder = (StockHolder)row.getTag();
         }
 
@@ -62,10 +59,12 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
 
         return row;
     }
+
     double RoundTo2Decimals(double val) {
         DecimalFormat df2 = new DecimalFormat("###.##");
         return Double.valueOf(df2.format(val));
     }
+
     static class StockHolder
     {
         TextView ticker;
