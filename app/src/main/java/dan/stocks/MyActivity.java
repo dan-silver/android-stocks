@@ -76,16 +76,6 @@ public class MyActivity extends Activity {
 
         public PlaceholderFragment() {
         }
-        public String randomString(int length) {
-            char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-            StringBuilder sb = new StringBuilder();
-            Random random = new Random();
-            for (int i = 0; i < length; i++) {
-                char c = chars[random.nextInt(chars.length)];
-                sb.append(c);
-            }
-            return sb.toString();
-        }
         public String upperCaseFirstChar(String s) {
             return s.substring(0,1).toUpperCase() + s.substring(1);
         }
@@ -93,11 +83,7 @@ public class MyActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             List<Stock> stocks = new ArrayList<Stock>();
-            for (int i=0;i<4;i++) {
-                double random = new Random().nextDouble();
-                stocks.add(new Stock(upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase()));
-            }
-
+            stocks.add(new Stock("Microsoft", "MSFT"));
             View view = inflater.inflate(R.layout.fragment_my,container,false);
             GridView gridView = (GridView) view.findViewById(R.id.gridview);
             this.adapter = new ImageAdapter(view.getContext(), R.layout.grid_element, stocks);
@@ -107,7 +93,7 @@ public class MyActivity extends Activity {
 
         public void addStock() {
             Toast.makeText(getActivity(), "Creating new stock from fragment", Toast.LENGTH_SHORT).show();
-            adapter.add(new Stock(upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase()));
+            adapter.add(new Stock("Microsoft", "MSFT"));
         }
 
         public void refreshStocks() {

@@ -6,6 +6,9 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Random;
 
 /**
@@ -32,8 +35,13 @@ public class Stock {
         client.get("http://dev.markitondemand.com/Api/v2/Quote/json", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
-                lastPrice = new Random().nextDouble() * 100;
-                Log.d("STOCK", response);
+                JSONObject res;
+                try {
+                    res = new JSONObject(response);
+                    lastPrice = res.getDouble("LastPrice");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
