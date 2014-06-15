@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * Created by dan on 6/14/14.
@@ -17,14 +18,19 @@ import java.text.DecimalFormat;
 public class ImageAdapter extends ArrayAdapter<Stock> {
 
     Context context;
-    Stock[] stocks;
+    List<Stock> stocks;
     int layoutResourceId;
 
-    public ImageAdapter(Context context, int layoutResourceId, Stock[] stocks) {
+    public ImageAdapter(Context context, int layoutResourceId, List<Stock> stocks) {
         super(context, layoutResourceId, stocks);
         this.context = context;
         this.stocks = stocks;
         this.layoutResourceId = layoutResourceId;
+    }
+
+    public void add(Stock stock) {
+        stocks.add(stock);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -49,7 +55,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
             holder = (StockHolder)row.getTag();
         }
 
-        Stock s = stocks[position];
+        Stock s = stocks.get(position);
         holder.ticker.setText(s.ticker);
         holder.companyName.setText(s.companyName);
         holder.lastPrice.setText(Double.toString(RoundTo2Decimals(s.lastPrice)));
