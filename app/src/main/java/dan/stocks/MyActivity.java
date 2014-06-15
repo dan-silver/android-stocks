@@ -73,12 +73,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         return findViewById(R.id.fragment_container) != null;
     }
     public StockListFragment getListFragment() {
-        int list_fragment_id;
-        if (inSinglePaneLayout()) { //single pane
-            list_fragment_id = R.id.fragment_container;
-        } else {
-            list_fragment_id = R.id.stock_list_fragment;
-        }
+        int list_fragment_id = inSinglePaneLayout() ? R.id.fragment_container : R.id.stock_list_fragment;
         return ((StockListFragment) getFragmentManager().findFragmentById(list_fragment_id));
     }
 
