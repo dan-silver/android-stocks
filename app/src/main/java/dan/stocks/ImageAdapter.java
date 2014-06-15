@@ -2,6 +2,7 @@ package dan.stocks;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,13 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         holder.change.setText(RoundTo2Decimals(s.change));
         holder.changePercent.setText("("+RoundTo2Decimals(s.changePercent) + "%)");
 
+        if (s.changePercent >= 0) {
+            holder.changePercent.setTextColor(Color.parseColor("#3d9400"));
+            holder.change.setTextColor(Color.parseColor("#3d9400"));
+        } else {
+            holder.changePercent.setTextColor(Color.parseColor("#dd4b39"));
+            holder.change.setTextColor(Color.parseColor("#dd4b39"));
+        }
         return row;
     }
 
