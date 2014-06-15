@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
+import android.widget.GridView;
 
 
 public class MyActivity extends Activity {
@@ -57,7 +57,10 @@ public class MyActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_my, container, false);
+            View view = inflater.inflate(R.layout.fragment_my,container,false);
+            GridView gridView = (GridView) view.findViewById(R.id.gridview);
+            gridView.setAdapter(new ImageAdapter(view.getContext()));
+            return view;
         }
     }
 }
