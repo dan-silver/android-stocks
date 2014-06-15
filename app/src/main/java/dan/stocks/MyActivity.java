@@ -81,6 +81,7 @@ public class MyActivity extends Activity {
 
             List<Stock> stocks = new ArrayList<Stock>();
             stocks.add(new Stock("MSFT"));
+            stocks.add(new Stock("AAPL"));
             View view = inflater.inflate(R.layout.fragment_my,container,false);
             GridView gridView = (GridView) view.findViewById(R.id.gridview);
             this.adapter = new ImageAdapter(view.getContext(), R.layout.grid_element, stocks);
@@ -89,8 +90,7 @@ public class MyActivity extends Activity {
         }
 
         public void addStock() {
-            Toast.makeText(getActivity(), "Creating new stock from fragment", Toast.LENGTH_SHORT).show();
-            adapter.add(new Stock("MSFT"));
+            adapter.add("VZ");
         }
 
         public void refreshStocks() {

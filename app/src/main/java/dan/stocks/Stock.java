@@ -1,5 +1,6 @@
 package dan.stocks;
 
+import android.media.Image;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -30,7 +31,7 @@ public class Stock {
         this.ticker = ticker;
     }
 
-    void updateStockPrice() {
+    void updateStockPrice(final ImageAdapter adapter) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams("symbol", this.ticker);
         client.get("http://dev.markitondemand.com/Api/v2/Quote/json", params, new AsyncHttpResponseHandler() {
@@ -38,10 +39,12 @@ public class Stock {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
+                    Log.v("STOCK", response);
                     res = new JSONObject(response);
                     lastPrice = res.getDouble("LastPrice");
                     change = res.getDouble("Change");
                     changePercent = res.getDouble("ChangePercent");
+                    adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -28,8 +28,8 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         this.layoutResourceId = layoutResourceId;
     }
 
-    public void add(Stock stock) {
-        stocks.add(stock);
+    public void add(String ticker) {
+        stocks.add(new Stock(ticker));
         notifyDataSetChanged();
     }
 
@@ -69,9 +69,8 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
 
     public void refreshStocks() {
         for(Stock s : stocks) {
-            s.updateStockPrice();
+            s.updateStockPrice(this);
         }
-        notifyDataSetChanged();
     }
 
     static class StockHolder
