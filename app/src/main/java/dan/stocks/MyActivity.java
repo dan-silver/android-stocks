@@ -59,7 +59,9 @@ public class MyActivity extends Activity {
                 Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_my,container,false);
             GridView gridView = (GridView) view.findViewById(R.id.gridview);
-            gridView.setAdapter(new ImageAdapter(view.getContext()));
+            String[] stocks = new String[] {
+                    "AAAA", "BBBB", "CCCC", "DDDD", "EEEE"};
+            gridView.setAdapter(new ImageAdapter(view.getContext(), stocks));
             return view;
         }
     }

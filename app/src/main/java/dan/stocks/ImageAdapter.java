@@ -1,24 +1,34 @@
 package dan.stocks;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by dan on 6/14/14.
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
+    private final String[] stocks;
 
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c, String[] stocks) {
         mContext = c;
+        this.stocks = stocks;
     }
 
     public int getCount() {
-        return 200;
+        return stocks.length;
     }
 
     public Object getItem(int position) {
@@ -31,24 +41,16 @@ public class ImageAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {  // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+      LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View gridView;
+        if (convertView == null) {
+            gridView = inflater.inflate(R.layout.grid_element, null);
+            TextView textView = (TextView) gridView.findViewById(R.id.symbol);
+            textView.setText(stocks[position]);
         } else {
-            imageView = (ImageView) convertView;
+            gridView = convertView;
         }
-
-        imageView.setImageResource(mThumbIds[position % 6]);
-        return imageView;
+        return gridView;
     }
 
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7
-    };
 }
