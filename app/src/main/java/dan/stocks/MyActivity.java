@@ -52,8 +52,16 @@ public class MyActivity extends Activity {
             case R.id.new_stock:
                 createStock();
                 return true;
+            case R.id.refresh:
+                refreshStocks();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshStocks() {
+        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.container);
+        fragment.refreshStocks();
     }
 
     public void createStock() {
@@ -82,13 +90,12 @@ public class MyActivity extends Activity {
             return s.substring(0,1).toUpperCase() + s.substring(1);
         }
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             List<Stock> stocks = new ArrayList<Stock>();
             for (int i=0;i<100;i++) {
                 double random = new Random().nextDouble();
-                stocks.add(new Stock((random * 1000), upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase()));
+                stocks.add(new Stock(upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase()));
             }
 
             View view = inflater.inflate(R.layout.fragment_my,container,false);
@@ -100,7 +107,11 @@ public class MyActivity extends Activity {
 
         public void addStock() {
             Toast.makeText(getActivity(), "Creating new stock from fragment", Toast.LENGTH_SHORT).show();
-            adapter.add(new Stock((new Random().nextDouble() * 1000), upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase()));
+            adapter.add(new Stock(upperCaseFirstChar(randomString((int) (Math.random() * (7) + 3))), randomString((int)(Math.random() * (3) + 2)).toUpperCase()));
+        }
+
+        public void refreshStocks() {
+            adapter.refreshStocks();
         }
     }
 }

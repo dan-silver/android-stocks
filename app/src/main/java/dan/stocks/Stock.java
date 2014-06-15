@@ -1,5 +1,7 @@
 package dan.stocks;
 
+import java.util.Random;
+
 /**
  * Created by dan on 6/14/14.
  */
@@ -12,10 +14,14 @@ public class Stock {
         super();
     }
 
-    public Stock(double lastPrice, String companyName, String ticker) {
+    public Stock(String companyName, String ticker) {
         super();
-        this.lastPrice = lastPrice;
         this.companyName = companyName;
         this.ticker = ticker;
     }
+
+    void updateStockPrice() {
+        this.lastPrice = new Random().nextDouble() * 100;
+    }
+
 }

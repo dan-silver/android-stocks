@@ -30,6 +30,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
 
     public void add(Stock stock) {
         stocks.add(stock);
+        stock.updateStockPrice();
         notifyDataSetChanged();
     }
 
@@ -39,8 +40,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         StockHolder holder;
 
         if(row == null) {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+            row = ((Activity)context).getLayoutInflater().inflate(layoutResourceId, parent, false);
 
             holder = new StockHolder();
             holder.ticker = (TextView) row.findViewById(R.id.symbol);
@@ -61,8 +61,14 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
     }
 
     double RoundTo2Decimals(double val) {
-        DecimalFormat df2 = new DecimalFormat("###.##");
-        return Double.valueOf(df2.format(val));
+        return Double.valueOf(new DecimalFormat("###.##").format(val));
+    }
+
+    public void refreshStocks() {
+        for(Stock s : stocks) {
+            s.updateStockPrice();
+        }
+        notifyDataSetChanged();
     }
 
     static class StockHolder
