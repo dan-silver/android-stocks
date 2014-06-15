@@ -59,13 +59,25 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
 
     private void refreshStocks() {
-//        ((StockListFragment) getFragmentManager().findFragmentById(R.id.container)).refreshStocks();
+        getListFragment().refreshStocks();
+    }
+    public void createStock() {
+        getListFragment().addStock();
     }
 
-    public void createStock() {
-//        StockListFragment fragment = (StockListFragment) getFragmentManager().findFragmentById(R.id.container);
-//        fragment.addStock();
+    public boolean inSinglePaneLayout() {
+        return findViewById(R.id.fragment_container) != null;
     }
+    public StockListFragment getListFragment() {
+        int list_fragment_id;
+        if (inSinglePaneLayout()) { //single pane
+            list_fragment_id = R.id.fragment_container;
+        } else {
+            list_fragment_id = R.id.stock_list_fragment;
+        }
+        return ((StockListFragment) getFragmentManager().findFragmentById(list_fragment_id));
+    }
+
 
     @Override
     public void onStockSelected(int position) {
