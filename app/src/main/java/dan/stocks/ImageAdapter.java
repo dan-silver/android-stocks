@@ -6,9 +6,11 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -59,8 +61,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         holder.companyName.setText(s.companyName);
         holder.lastPrice.setText(RoundTo2Decimals(s.lastPrice));
         holder.change.setText(RoundTo2Decimals(s.change));
-        holder.changePercent.setText("("+RoundTo2Decimals(s.changePercent) + "%)");
-
+        holder.changePercent.setText("(" + RoundTo2Decimals(s.changePercent) + "%)");
         if (s.changePercent >= 0) {
             holder.changePercent.setTextColor(Color.parseColor("#3d9400"));
             holder.change.setTextColor(Color.parseColor("#3d9400"));
@@ -88,5 +89,6 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         TextView lastPrice;
         TextView change;
         TextView changePercent;
+        ImageView settings;
     }
 }

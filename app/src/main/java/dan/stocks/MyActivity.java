@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,7 +34,6 @@ public class MyActivity extends Activity {
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,9 +83,18 @@ public class MyActivity extends Activity {
             stocks.add(new Stock("MSFT"));
             stocks.add(new Stock("AAPL"));
             View view = inflater.inflate(R.layout.fragment_my, container, false);
-            GridView gridView = (GridView) view.findViewById(R.id.gridview);
+            ListView listView = (ListView) view.findViewById(R.id.listview);
             this.adapter = new ImageAdapter(view.getContext(), R.layout.grid_element, stocks);
-            gridView.setAdapter(adapter);
+            listView.setAdapter(adapter);
+
+            //listView.setSelector();
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Log.d("STOCKS", "" + position);
+
+                }
+            });
             return view;
         }
 

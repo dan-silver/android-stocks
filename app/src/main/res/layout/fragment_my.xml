@@ -4,16 +4,10 @@
     android:layout_height="match_parent"
     tools:context=".MyActivity$PlaceholderFragment">
 
-    <GridView
-        android:id="@+id/gridview"
+    <ListView
+        android:id="@+id/listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:columnWidth="300dp"
-        android:numColumns="2"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:stretchMode="columnWidth"
-        android:gravity="left"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"/>
 
