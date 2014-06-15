@@ -62,7 +62,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         return super.onOptionsItemSelected(item);
     }
 
-    private void refreshStocks() {
+    public void refreshStocks() {
         getListFragment().refreshStocks();
     }
     public void createStock() {
@@ -89,16 +89,14 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         // The user selected the headline of an article from the HeadlinesFragment
 
         // Capture the article fragment from the activity layout
-        StockDetailFragment articleFrag = (StockDetailFragment) getSupportFragmentManager().findFragmentById(R.id.stock_detail_fragment);
+        StockDetailFragment detailFragment = (StockDetailFragment) getSupportFragmentManager().findFragmentById(R.id.stock_detail_fragment);
 
-        if (articleFrag != null) {
+        if (detailFragment != null) {
             // If article frag is available, we're in two-pane layout...
-
             // Call a method in the ArticleFragment to update its content
-            articleFrag.updateArticleView(position);
+            detailFragment.updateArticleView(position);
 
         } else {
-            Log.v("STOCKS", "in one pane layout");
             // If the frag is not available, we're in the one-pane layout and must swap frags...
 
             // Create fragment and give it an argument for the selected article
