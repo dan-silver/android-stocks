@@ -30,11 +30,7 @@ public class StockListFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        List<Stock> stocks = new ArrayList<Stock>();
-        stocks.add(new Stock("MSFT"));
-        stocks.add(new Stock("AAPL"));
-
-        setListAdapter(new ImageAdapter(getActivity(), R.layout.grid_element, stocks));
+        setListAdapter(new ImageAdapter(getActivity(), R.layout.grid_element, MyActivity.stocks));
 
         View detailsFrame = getActivity().findViewById(R.id.stock_detail_fragment);
         mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;

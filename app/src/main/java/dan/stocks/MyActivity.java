@@ -8,28 +8,32 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener{
-
+    static List<Stock> stocks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stocks);
-//        if (savedInstanceState == null) return;
 
-        if (findViewById(R.id.fragment_container) != null) { //single pane
-            // Create an instance of ExampleFragment
-            StockListFragment firstFragment = new StockListFragment();
+        if (stocks == null) {
+            stocks = new ArrayList<Stock>();
+            stocks.add(new Stock("MSFT"));
+            stocks.add(new Stock("AAPL"));
+        }
+
+        if (inSinglePaneLayout()) { //single pane
+            StockListFragment listFragment = new StockListFragment();
 
             // In case this activity was started with special instructions from an Intent,
             // pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
+            listFragment.setArguments(getIntent().getExtras());
 
             // Add the fragment to the 'fragment_container' FrameLayout
-            getFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
-        } else { //dual pane
-//            StockListFragment headlines = (StockListFragment) getSupportFragmentManager().findFragmentById(R.id.headlines_fragment);
-//            headlines.createList();
+            getFragmentManager().beginTransaction().add(R.id.fragment_container, listFragment).commit();
         }
     }
 

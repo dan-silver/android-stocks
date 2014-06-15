@@ -2,15 +2,10 @@ package dan.stocks;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-
-import org.json.JSONException;
 
 /**
  * Created by dan on 6/15/14.
@@ -18,22 +13,10 @@ import org.json.JSONException;
 public class StockDetailFragment extends Fragment {
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
-    public StockDetailFragment newInstance(int index) {
-        StockDetailFragment f = new StockDetailFragment();
 
-        // Supply index input as an argument.
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        f.setArguments(args);
-
-        return f;
-    }
     @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.stock_detail, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.stock_detail, container, false);
     }
     @Override
     public void onStart() {
@@ -55,7 +38,7 @@ public class StockDetailFragment extends Fragment {
 
     public void updateArticleView(int position) {
         TextView article = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
-        article.setText("abcdefg");
+        article.setText(MyActivity.stocks.get(position).companyName);
         mCurrentPosition = position;
     }
 
