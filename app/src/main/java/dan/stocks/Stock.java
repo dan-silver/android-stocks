@@ -18,14 +18,15 @@ public class Stock {
     public double lastPrice;
     public String companyName;
     public String ticker;
+    public double change;
+    public double changePercent;
 
     public Stock() {
         super();
     }
 
-    public Stock(String companyName, String ticker) {
+    public Stock(String ticker) {
         super();
-        this.companyName = companyName;
         this.ticker = ticker;
     }
 
@@ -39,6 +40,8 @@ public class Stock {
                 try {
                     res = new JSONObject(response);
                     lastPrice = res.getDouble("LastPrice");
+                    change = res.getDouble("Change");
+                    changePercent = res.getDouble("ChangePercent");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -44,7 +44,9 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
             holder = new StockHolder();
             holder.ticker = (TextView) row.findViewById(R.id.symbol);
             holder.companyName = (TextView) row.findViewById(R.id.companyName);
-            holder.lastPrice= (TextView) row.findViewById(R.id.lastPrice);
+            holder.change = (TextView) row.findViewById(R.id.change);
+            holder.changePercent = (TextView) row.findViewById(R.id.changePercent);
+            holder.lastPrice = (TextView) row.findViewById(R.id.lastPrice);
 
             row.setTag(holder);
         } else {
@@ -54,13 +56,15 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         Stock s = stocks.get(position);
         holder.ticker.setText(s.ticker);
         holder.companyName.setText(s.companyName);
-        holder.lastPrice.setText(Double.toString(RoundTo2Decimals(s.lastPrice)));
+        holder.lastPrice.setText(RoundTo2Decimals(s.lastPrice));
+        holder.change.setText(RoundTo2Decimals(s.change));
+        holder.changePercent.setText(RoundTo2Decimals(s.changePercent));
 
         return row;
     }
 
-    double RoundTo2Decimals(double val) {
-        return Double.valueOf(new DecimalFormat("###.##").format(val));
+    String RoundTo2Decimals(double val) {
+        return Double.toString(Double.valueOf(new DecimalFormat("###.##").format(val)));
     }
 
     public void refreshStocks() {
@@ -75,5 +79,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         TextView ticker;
         TextView companyName;
         TextView lastPrice;
+        TextView change;
+        TextView changePercent;
     }
 }

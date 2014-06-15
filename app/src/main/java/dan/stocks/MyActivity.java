@@ -76,14 +76,11 @@ public class MyActivity extends Activity {
 
         public PlaceholderFragment() {
         }
-        public String upperCaseFirstChar(String s) {
-            return s.substring(0,1).toUpperCase() + s.substring(1);
-        }
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             List<Stock> stocks = new ArrayList<Stock>();
-            stocks.add(new Stock("Microsoft", "MSFT"));
+            stocks.add(new Stock("MSFT"));
             View view = inflater.inflate(R.layout.fragment_my,container,false);
             GridView gridView = (GridView) view.findViewById(R.id.gridview);
             this.adapter = new ImageAdapter(view.getContext(), R.layout.grid_element, stocks);
@@ -93,7 +90,7 @@ public class MyActivity extends Activity {
 
         public void addStock() {
             Toast.makeText(getActivity(), "Creating new stock from fragment", Toast.LENGTH_SHORT).show();
-            adapter.add(new Stock("Microsoft", "MSFT"));
+            adapter.add(new Stock("MSFT"));
         }
 
         public void refreshStocks() {
