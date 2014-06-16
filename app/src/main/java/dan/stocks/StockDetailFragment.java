@@ -3,6 +3,7 @@ package dan.stocks;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,11 @@ import android.widget.TextView;
  * Created by dan on 6/15/14.
  */
 public class StockDetailFragment extends Fragment {
-    final static String ARG_POSITION = "position";
-    int mCurrentPosition = -1;
+    final static String STOCK_DB_ID = "stock_db_id";
+    final static String CURRENT_POSITION = "mPosition";
     OnStockRemoveListener removeCallback;
+    Stock currentStock;
+    int mCurrentPosition = -1;
 
     @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,11 +35,14 @@ public class StockDetailFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             // Set article based on argument passed in
-            updateArticleView(args.getInt(ARG_POSITION));
-        } else if (mCurrentPosition != -1) {
-            // Set article based on saved instance state defined during onCreateView
-            updateArticleView(mCurrentPosition);
+            updateArticleView(-1, args.getInt(STOCK_DB_ID));
+
+            //mCurrentPosition = args.getInt(CURRENT_POSITION);
         }
+//          else if (mCurrentPosition != -1) {
+//            // Set article based on saved instance state defined during onCreateView
+//            updateArticleView(mCurrentPosition);
+//        }
 
         Button removeStock = (Button) getActivity().findViewById(R.id.remove_stock);
         removeStock.setOnClickListener(new View.OnClickListener() {
@@ -48,13 +54,20 @@ public class StockDetailFragment extends Fragment {
         });
     }
     public interface OnStockRemoveListener {
-        public void onStockRemoved(int position);
+        public void onStockRemoved(int stockDbId);
     }
-    public void updateArticleView(int position) {
-        if (position != -1) {
-            TextView article = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
-            article.setText(MyActivity.stocks.get(position).companyName);
-            mCurrentPosition = position;
+    public void updateArticleView(int pos, int stockDbId) {
+        if (pos != -1) mCurrentPosition = pos;
+        Log.v("STOCKS", "updating article view");
+        if (stockDbId != -1) {
+            TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
+            StocksDataSource dataSource = new StocksDataSource(getActivity());
+            dataSource.open();
+            currentStock = dataSource.getStock(stockDbId);
+            Log.v("STOCKS", "the company name is " + currentStock.companyName);
+            Log.v("STOCKS", "the ticker is " + currentStock.ticker);
+            dataSource.close();
+            tickerTV.setText(currentStock.ticker);
         }
     }
 
@@ -63,7 +76,7 @@ public class StockDetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         // Save the current article selection in case we need to recreate the fragment
-        outState.putInt(ARG_POSITION, mCurrentPosition);
+        outState.putInt(STOCK_DB_ID, mCurrentPosition);
     }
     @Override
     public void onAttach(Activity activity) {

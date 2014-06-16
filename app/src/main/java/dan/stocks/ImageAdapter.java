@@ -21,7 +21,7 @@ import java.util.List;
 public class ImageAdapter extends ArrayAdapter<Stock> {
 
     Context context;
-    List<Stock> stocks;
+    public List<Stock> stocks;
     int layoutResourceId;
 
     public ImageAdapter(Context context, int layoutResourceId, List<Stock> stocks) {
@@ -36,9 +36,10 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         notifyDataSetChanged();
     }
 
-    public void remove(int position) {
-        stocks.remove(position);
+    public Stock remove(int position) {
+        Stock s = stocks.remove(position);
         notifyDataSetChanged();
+        return s;
     }
 
     @Override

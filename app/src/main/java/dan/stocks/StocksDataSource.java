@@ -76,6 +76,20 @@ public class StocksDataSource {
         return stocks;
     }
 
+    public Stock getStock(int id) {
+        Stock s = new Stock();
+        Cursor cursor = database.query(StocksSQLiteHelper.TABLE_STOCKS,
+                allColumns, StocksSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            s = cursorToStock(cursor);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return s;
+    }
     private Stock cursorToStock(Cursor cursor) {
         Stock stock = new Stock();
         stock.id = (int) cursor.getLong(0);

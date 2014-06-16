@@ -1,7 +1,6 @@
 package dan.stocks;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -9,20 +8,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener{
-    static List<Stock> stocks;
 
-    public void fetchStocks() {
-        stocks.clear();
+    public List<Stock> fetchStocks() {
         StocksDataSource dataSource = new StocksDataSource(this);
         dataSource.open();
-        stocks = dataSource.getAllStocks();
+        List<Stock> stocks = dataSource.getAllStocks();
         dataSource.close();
+        return stocks;
     }
 
     @Override
@@ -30,10 +27,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         super.onCreate(savedInstanceState);
 //        getApplicationContext().deleteDatabase("sets.db");
         setContentView(R.layout.stocks);
-        if (stocks == null) {
-            stocks = new ArrayList<Stock>();
-            fetchStocks();
-        }
 
         if (inSinglePaneLayout()) { //single pane
             StockListFragment listFragment = new StockListFragment();
@@ -77,20 +70,21 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
     public void createStock() {
         StocksDataSource dataSource = new StocksDataSource(this);
-        Stock s = dataSource.open().insertStock(getRandomString(5));
+        Stock s = dataSource.open().insertStock(randomStockName());
         dataSource.close();
         getListFragment().updateListWithNewStock(s);
     }
 
-    public String getRandomString(int length) {
-        final String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder result = new StringBuilder();
-        while(length > 0) {
-            Random rand = new Random();
-            result.append(characters.charAt(rand.nextInt(characters.length())));
-            length--;
+    public String randomStockName() {
+        int i = new Random().nextInt(4);
+        switch (i) {
+            case 0: return "T";
+            case 1: return "VZ";
+            case 2: return "S";
+            case 3: return "CMCSA";
+            case 4: return "DISH";
+            default: return "DTV";
         }
-        return result.toString();
     }
 
     public boolean inSinglePaneLayout() {
@@ -103,8 +97,8 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
 
     @Override
-    public void onStockSelected(int position) {
-        Log.v("STOCKS", "going to detail " + position);
+    public void onStockSelected(int pos, int stockDbId) {
+        Log.v("STOCKS", "stockDbId = " + stockDbId);
         // The user selected the headline of an article from the HeadlinesFragment
 
         // Capture the article fragment from the activity layout
@@ -113,7 +107,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         if (detailFragment != null) {
             // If article frag is available, we're in two-pane layout...
             // Call a method in the ArticleFragment to update its content
-            detailFragment.updateArticleView(position);
+            detailFragment.updateArticleView(pos, stockDbId);
 
         } else {
             // If the frag is not available, we're in the one-pane layout and must swap frags...
@@ -121,7 +115,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             // Create fragment and give it an argument for the selected article
             StockDetailFragment newFragment = new StockDetailFragment();
             Bundle args = new Bundle();
-            args.putInt(StockDetailFragment.ARG_POSITION, position);
+            args.putInt(StockDetailFragment.STOCK_DB_ID, stockDbId);
             newFragment.setArguments(args);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -135,17 +129,17 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         }
     }
 
-    public void removeStock(int mCurrentPosition) {
-        getListFragment().removeStockFromList(mCurrentPosition);
+    public void removeStock(int pos) {
+        Stock s = getListFragment().removeStockFromList(pos);
         StocksDataSource dataSource = new StocksDataSource(this);
         dataSource.open();
-        dataSource.deleteStock(stocks.get(mCurrentPosition).id);
+        dataSource.deleteStock(s.id);
         dataSource.close();
 
     }
 
     @Override
-    public void onStockRemoved(int position) {
-        removeStock(position);
+    public void onStockRemoved(int pos) {
+        removeStock(pos);
     }
 }
