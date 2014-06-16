@@ -129,17 +129,12 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         }
     }
 
-    public void removeStock(int pos) {
+    @Override
+    public void onStockRemoved(int pos) {
         Stock s = getListFragment().removeStockFromList(pos);
         StocksDataSource dataSource = new StocksDataSource(this);
         dataSource.open();
         dataSource.deleteStock(s.id);
         dataSource.close();
-
-    }
-
-    @Override
-    public void onStockRemoved(int pos) {
-        removeStock(pos);
     }
 }
