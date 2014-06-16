@@ -14,15 +14,24 @@ import java.util.List;
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener{
     static List<Stock> stocks;
+
+    public void fetchStocks() {
+        stocks.clear();
+        StocksDataSource dataSource = new StocksDataSource(this);
+        dataSource.open();
+        stocks = dataSource.getAllStocks();
+        dataSource.close();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        getApplicationContext().deleteDatabase("sets.db");
         setContentView(R.layout.stocks);
 
         if (stocks == null) {
             stocks = new ArrayList<Stock>();
-            stocks.add(new Stock("MSFT"));
-            stocks.add(new Stock("AAPL"));
+            fetchStocks();
         }
 
         if (inSinglePaneLayout()) { //single pane
@@ -66,17 +75,20 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         getListFragment().refreshStocks();
     }
     public void createStock() {
-        getListFragment().addStock();
+        StocksDataSource dataSource = new StocksDataSource(this);
+        Stock s = dataSource.open().insertStock("T");
+        dataSource.close();
+        getListFragment().updateListWithNewStock(s);
     }
 
     public boolean inSinglePaneLayout() {
         return findViewById(R.id.fragment_container) != null;
     }
+
     public StockListFragment getListFragment() {
         int list_fragment_id = inSinglePaneLayout() ? R.id.fragment_container : R.id.stock_list_fragment;
         return ((StockListFragment) getFragmentManager().findFragmentById(list_fragment_id));
     }
-
 
     @Override
     public void onStockSelected(int position) {

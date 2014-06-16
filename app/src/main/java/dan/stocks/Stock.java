@@ -21,6 +21,7 @@ public class Stock {
     public String ticker;
     public double change;
     public double changePercent;
+    public int id;
 
     public Stock() {
         super();

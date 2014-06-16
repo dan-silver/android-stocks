@@ -89,6 +89,5 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         TextView lastPrice;
         TextView change;
         TextView changePercent;
-        ImageView settings;
     }
 }

@@ -75,11 +75,13 @@ public class StockListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         mCallback.onStockSelected(position);
-        getListView().setItemChecked(position, true);
+        v.setSelected(true);
         Log.d("STOCKS", "" + position);
     }
-    public void addStock() {
-        ((ImageAdapter) getListAdapter()).add("VZ");
+    public void updateListWithNewStock(Stock s) {
+        if (getListAdapter() != null) {
+            ((ImageAdapter) getListAdapter()).add(s);
+        }
     }
 
     public void refreshStocks() {
