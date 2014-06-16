@@ -36,6 +36,11 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         notifyDataSetChanged();
     }
 
+    public void remove(int position) {
+        stocks.remove(position);
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;

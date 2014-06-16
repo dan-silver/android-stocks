@@ -53,12 +53,11 @@ public class StocksDataSource {
     }
 
 
-//    public void deleteSet(Set set) {
-//        long id = set.getId();
-//        System.out.println("Set deleted with id: " + id);
-//        database.delete(SetsSQLiteHelper.TABLE_SETS, SetsSQLiteHelper.COLUMN_ID
-//                + " = " + id, null);
-//    }
+    public void deleteStock(long id) {
+        System.out.println("Set deleted with id: " + id);
+        database.delete(StocksSQLiteHelper.TABLE_STOCKS, StocksSQLiteHelper.COLUMN_ID
+                + " = " + id, null);
+    }
 
     public List<Stock> getAllStocks() {
         List<Stock> stocks = new ArrayList<Stock>();

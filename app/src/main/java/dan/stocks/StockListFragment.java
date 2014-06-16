@@ -84,6 +84,12 @@ public class StockListFragment extends ListFragment {
         }
     }
 
+    public void removeStockFromList(int pos) {
+        if (getListAdapter() != null) {
+            ((ImageAdapter) getListAdapter()).remove(pos);
+        }
+    }
+
     public void refreshStocks() {
         ((ImageAdapter) getListAdapter()).refreshStocks();
     }

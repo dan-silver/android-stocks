@@ -1,6 +1,7 @@
 package dan.stocks;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -10,9 +11,10 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
-public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener{
+public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener{
     static List<Stock> stocks;
 
     public void fetchStocks() {
@@ -28,7 +30,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         super.onCreate(savedInstanceState);
 //        getApplicationContext().deleteDatabase("sets.db");
         setContentView(R.layout.stocks);
-
         if (stocks == null) {
             stocks = new ArrayList<Stock>();
             fetchStocks();
@@ -76,9 +77,20 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
     public void createStock() {
         StocksDataSource dataSource = new StocksDataSource(this);
-        Stock s = dataSource.open().insertStock("T");
+        Stock s = dataSource.open().insertStock(getRandomString(5));
         dataSource.close();
         getListFragment().updateListWithNewStock(s);
+    }
+
+    public String getRandomString(int length) {
+        final String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder result = new StringBuilder();
+        while(length > 0) {
+            Random rand = new Random();
+            result.append(characters.charAt(rand.nextInt(characters.length())));
+            length--;
+        }
+        return result.toString();
     }
 
     public boolean inSinglePaneLayout() {
@@ -121,5 +133,19 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             // Commit the transaction
             transaction.commit();
         }
+    }
+
+    public void removeStock(int mCurrentPosition) {
+        getListFragment().removeStockFromList(mCurrentPosition);
+        StocksDataSource dataSource = new StocksDataSource(this);
+        dataSource.open();
+        dataSource.deleteStock(stocks.get(mCurrentPosition).id);
+        dataSource.close();
+
+    }
+
+    @Override
+    public void onStockRemoved(int position) {
+        removeStock(position);
     }
 }

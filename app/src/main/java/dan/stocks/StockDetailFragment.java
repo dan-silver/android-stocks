@@ -1,10 +1,12 @@
 package dan.stocks;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -13,6 +15,7 @@ import android.widget.TextView;
 public class StockDetailFragment extends Fragment {
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
+    OnStockRemoveListener removeCallback;
 
     @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,12 +37,25 @@ public class StockDetailFragment extends Fragment {
             // Set article based on saved instance state defined during onCreateView
             updateArticleView(mCurrentPosition);
         }
-    }
 
+        Button removeStock = (Button) getActivity().findViewById(R.id.remove_stock);
+        removeStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeCallback.onStockRemoved(mCurrentPosition);
+                mCurrentPosition = -1;
+            }
+        });
+    }
+    public interface OnStockRemoveListener {
+        public void onStockRemoved(int position);
+    }
     public void updateArticleView(int position) {
-        TextView article = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
-        article.setText(MyActivity.stocks.get(position).companyName);
-        mCurrentPosition = position;
+        if (position != -1) {
+            TextView article = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
+            article.setText(MyActivity.stocks.get(position).companyName);
+            mCurrentPosition = position;
+        }
     }
 
     @Override
@@ -48,4 +64,18 @@ public class StockDetailFragment extends Fragment {
 
         // Save the current article selection in case we need to recreate the fragment
         outState.putInt(ARG_POSITION, mCurrentPosition);
-    }}
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            removeCallback = (OnStockRemoveListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+}
