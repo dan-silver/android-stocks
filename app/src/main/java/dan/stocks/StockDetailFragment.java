@@ -3,7 +3,6 @@ package dan.stocks;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class StockDetailFragment extends Fragment {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
             StocksDataSource dataSource = new StocksDataSource(getActivity());
             dataSource.open();
-            currentStock = dataSource.getStock(stockDbId);
+            currentStock = dataSource.get(stockDbId);
 //            Log.v("STOCKS", "the company name is " + currentStock.companyName);
 //            Log.v("STOCKS", "the ticker is " + currentStock.ticker);
             dataSource.close();

@@ -4,7 +4,6 @@ package dan.stocks;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,7 +16,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     public List<Stock> fetchStocks() {
         StocksDataSource dataSource = new StocksDataSource(this);
         dataSource.open();
-        List<Stock> stocks = dataSource.getAllStocks();
+        List<Stock> stocks = dataSource.getAllRows();
         dataSource.close();
         return stocks;
     }
@@ -70,7 +69,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
     public void createStock() {
         StocksDataSource dataSource = new StocksDataSource(this);
-        Stock s = dataSource.open().insertStock(randomStockName());
+        Stock s = dataSource.open().insert(randomStockName());
         dataSource.close();
         getListFragment().updateListWithNewStock(s);
         selectionPosition = getListFragment().setLastSelected();
