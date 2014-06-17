@@ -31,11 +31,6 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         this.layoutResourceId = layoutResourceId;
     }
 
-    public void add(String ticker) {
-        stocks.add(new Stock(getContext(), ticker));
-        notifyDataSetChanged();
-    }
-
     public Stock remove(int position) {
         Stock s = stocks.remove(position);
         notifyDataSetChanged();

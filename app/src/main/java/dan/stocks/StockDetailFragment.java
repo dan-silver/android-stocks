@@ -56,9 +56,9 @@ public class StockDetailFragment extends Fragment {
         public void onStockRemoved();
     }
 
-    public void updateArticleView(int pos, int stockDbId) {
+    public void updateArticleView(int pos, long id) {
 //        if (pos != -1) mCurrentPosition = pos;
-        if (stockDbId != -1) {
+        if (id != -1) {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
 //            StocksDataSource dataSource = new StocksDataSource(getActivity());
 //            dataSource.open();

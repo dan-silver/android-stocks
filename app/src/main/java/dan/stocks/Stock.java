@@ -23,7 +23,6 @@ public class Stock extends SugarRecord<Stock> {
     public String ticker;
     public double change;
     public double changePercent;
-    public int id;
 
     public Stock(Context c) {
         super(c);
@@ -32,6 +31,7 @@ public class Stock extends SugarRecord<Stock> {
     public Stock(Context c, String ticker) {
         super(c);
         this.ticker = ticker;
+        Log.v(MyActivity.LOG_TAG, "saved a stock");
     }
 
     void updateStockPrice(final ImageAdapter adapter) {

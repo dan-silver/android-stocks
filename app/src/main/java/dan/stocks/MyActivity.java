@@ -12,12 +12,13 @@ import java.util.Random;
 
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener{
+    public static final String LOG_TAG = "STOCKS_LOG";
     int selectionPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getApplicationContext().deleteDatabase("sets.db");
+//        Stock.deleteAll(Stock.class);
         setContentView(R.layout.stocks);
 
         if (inSinglePaneLayout()) { //single pane
@@ -63,6 +64,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     public void createStock() {
 //        StocksDataSource dataSource = new StocksDataSource(this);
         Stock s = new Stock(getApplicationContext(), randomStockName());
+        s.save();
 //        dataSource.close();
         getListFragment().updateListWithNewStock(s);
         selectionPosition = getListFragment().setLastSelected();
@@ -92,7 +94,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
 
     @Override
-    public void onStockSelected(int pos, int stockDbId) {
+    public void onStockSelected(int pos, long id) {
         selectionPosition = pos;
         // The user selected the headline of an article from the HeadlinesFragment
 
@@ -102,7 +104,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         if (detailFragment != null) {
             // If article frag is available, we're in two-pane layout...
             // Call a method in the ArticleFragment to update its content
-            detailFragment.updateArticleView(pos, stockDbId);
+            detailFragment.updateArticleView(pos, id);
 
         } else {
             // If the frag is not available, we're in the one-pane layout and must swap frags...
@@ -110,7 +112,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             // Create fragment and give it an argument for the selected article
             StockDetailFragment newFragment = new StockDetailFragment();
             Bundle args = new Bundle();
-            args.putInt(StockDetailFragment.STOCK_DB_ID, stockDbId);
+            args.putLong(StockDetailFragment.STOCK_DB_ID, id);
             newFragment.setArguments(args);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -127,6 +129,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     public void onStockRemoved() {
         Stock s = getListFragment().removeStockFromList(selectionPosition);
+        s.delete();
 //        StocksDataSource dataSource = new StocksDataSource(this);
 //        dataSource.open();
 //        dataSource.deleteStock(s.id);

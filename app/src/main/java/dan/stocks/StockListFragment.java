@@ -30,7 +30,7 @@ public class StockListFragment extends ListFragment {
                 getListView().setSelection(p);
                 getListView().requestFocus();
                 mCurCheckPosition = p;
-                mCallback.onStockSelected(mCurCheckPosition, ((ImageAdapter) getListAdapter()).stocks.get(mCurCheckPosition).id);
+                mCallback.onStockSelected(mCurCheckPosition, ((ImageAdapter) getListAdapter()).stocks.get(mCurCheckPosition).getId());
             }
         });
     }
@@ -57,13 +57,14 @@ public class StockListFragment extends ListFragment {
     // The container Activity must implement this interface so the frag can deliver messages
     public interface OnStockSelectedListener {
         /** Called by HeadlinesFragment when a list item is selected */
-        public void onStockSelected(int pos, int stockDbId);
+        public void onStockSelected(int pos, long id);
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        setListAdapter(new ImageAdapter(getActivity(), R.layout.grid_element,new ArrayList<Stock>()));
+        List<Stock> stocks = Stock.listAll(Stock.class);
+        Log.v(MyActivity.LOG_TAG, "There are " + stocks.size() + " stocks.");
+        setListAdapter(new ImageAdapter(getActivity(), R.layout.grid_element, stocks));
 
         View detailsFrame = getActivity().findViewById(R.id.stock_detail_fragment);
         mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
@@ -107,7 +108,7 @@ public class StockListFragment extends ListFragment {
     }
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        mCallback.onStockSelected(position, ((ImageAdapter) getListAdapter()).stocks.get(position).id);
+        mCallback.onStockSelected(position, ((ImageAdapter) getListAdapter()).stocks.get(position).getId());
         v.setSelected(true);
         mCurCheckPosition = position;
     }
