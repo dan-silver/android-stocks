@@ -62,6 +62,7 @@
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.4" level="project" />
+    <orderEntry type="library" exported="" name="sugar-1.2" level="project" />
     <orderEntry type="library" exported="" name="android-support-v13" level="project" />
   </component>
 </module>

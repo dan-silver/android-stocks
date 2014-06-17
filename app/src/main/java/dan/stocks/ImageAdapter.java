@@ -32,7 +32,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
     }
 
     public void add(String ticker) {
-        stocks.add(new Stock(ticker));
+        stocks.add(new Stock(getContext(), ticker));
         notifyDataSetChanged();
     }
 

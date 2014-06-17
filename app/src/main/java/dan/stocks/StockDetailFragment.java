@@ -60,13 +60,13 @@ public class StockDetailFragment extends Fragment {
 //        if (pos != -1) mCurrentPosition = pos;
         if (stockDbId != -1) {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
-            StocksDataSource dataSource = new StocksDataSource(getActivity());
-            dataSource.open();
-            currentStock = dataSource.get(stockDbId);
+//            StocksDataSource dataSource = new StocksDataSource(getActivity());
+//            dataSource.open();
+//            currentStock = dataSource.get(stockDbId);
 //            Log.v("STOCKS", "the company name is " + currentStock.companyName);
 //            Log.v("STOCKS", "the ticker is " + currentStock.ticker);
-            dataSource.close();
-            tickerTV.setText(currentStock.ticker);
+//            dataSource.close();
+            tickerTV.setText("currentStock.ticker - need to reimplement updateArticleView()");
         }
     }
 

@@ -13,13 +13,6 @@ import java.util.Random;
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener{
     int selectionPosition = -1;
-    public List<Stock> fetchStocks() {
-        StocksDataSource dataSource = new StocksDataSource(this);
-        dataSource.open();
-        List<Stock> stocks = dataSource.getAllRows();
-        dataSource.close();
-        return stocks;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +61,9 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         getListFragment().refreshStocks();
     }
     public void createStock() {
-        StocksDataSource dataSource = new StocksDataSource(this);
-        Stock s = dataSource.open().insert(randomStockName());
-        dataSource.close();
+//        StocksDataSource dataSource = new StocksDataSource(this);
+        Stock s = new Stock(getApplicationContext(), randomStockName());
+//        dataSource.close();
         getListFragment().updateListWithNewStock(s);
         selectionPosition = getListFragment().setLastSelected();
     }
@@ -134,10 +127,10 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     public void onStockRemoved() {
         Stock s = getListFragment().removeStockFromList(selectionPosition);
-        StocksDataSource dataSource = new StocksDataSource(this);
-        dataSource.open();
-        dataSource.deleteStock(s.id);
-        dataSource.close();
+//        StocksDataSource dataSource = new StocksDataSource(this);
+//        dataSource.open();
+//        dataSource.deleteStock(s.id);
+//        dataSource.close();
         selectionPosition = getListFragment().setNextSelected();
     }
 }
