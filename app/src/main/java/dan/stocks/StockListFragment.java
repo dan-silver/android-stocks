@@ -35,15 +35,15 @@ public class StockListFragment extends ListFragment {
         });
     }
 
-    public int setNextSelected() {
+    public void setNextSelected() {
         if (getListView().getCount() > mCurCheckPosition) {
             setStockSelected(mCurCheckPosition);
-            return mCurCheckPosition;
+//            return mCurCheckPosition;
         } else if (getListView().getCount() > 0) {
             setStockSelected(mCurCheckPosition - 1);
-            return mCurCheckPosition - 1;
+//            return mCurCheckPosition - 1;
         }
-        return -1;
+//        return -1;
     }
 
 

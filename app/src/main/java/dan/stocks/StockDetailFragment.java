@@ -57,19 +57,13 @@ public class StockDetailFragment extends Fragment {
     }
 
     public void updateArticleView(int pos, long id) {
-//        if (pos != -1) mCurrentPosition = pos;
-        if (id != -1) {
-            TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
-//            StocksDataSource dataSource = new StocksDataSource(getActivity());
-//            dataSource.open();
-//            currentStock = dataSource.get(stockDbId);
-//            Log.v("STOCKS", "the company name is " + currentStock.companyName);
-//            Log.v("STOCKS", "the ticker is " + currentStock.ticker);
-//            dataSource.close();
-            tickerTV.setText("currentStock.ticker - need to reimplement updateArticleView()");
-        }
-    }
+        TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
 
+        Stock s = Stock.findById(Stock.class, id);
+        if (s != null) {
+            tickerTV.setText(s.ticker);
+        }
+     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
