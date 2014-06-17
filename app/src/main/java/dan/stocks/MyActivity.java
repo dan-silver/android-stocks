@@ -129,6 +129,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     public void onStockRemoved() {
         getListFragment().removeStockFromList(selectionPosition).delete();
-        selectionPosition = getListFragment().setNextSelected();
+        getListFragment().setNextSelected();
     }
 }
