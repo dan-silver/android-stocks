@@ -13,7 +13,7 @@ import java.util.Random;
 
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener{
-
+    int selectionPosition = -1;
     public List<Stock> fetchStocks() {
         StocksDataSource dataSource = new StocksDataSource(this);
         dataSource.open();
@@ -73,16 +73,19 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         Stock s = dataSource.open().insertStock(randomStockName());
         dataSource.close();
         getListFragment().updateListWithNewStock(s);
+        selectionPosition = getListFragment().setLastSelected();
     }
 
     public String randomStockName() {
-        int i = new Random().nextInt(4);
+        int i = new Random().nextInt(6);
         switch (i) {
             case 0: return "T";
             case 1: return "VZ";
             case 2: return "S";
             case 3: return "CMCSA";
             case 4: return "DISH";
+            case 5: return "GOOG";
+            case 6: return "DELL";
             default: return "DTV";
         }
     }
@@ -98,7 +101,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
 
     @Override
     public void onStockSelected(int pos, int stockDbId) {
-        Log.v("STOCKS", "stockDbId = " + stockDbId);
+        selectionPosition = pos;
         // The user selected the headline of an article from the HeadlinesFragment
 
         // Capture the article fragment from the activity layout
@@ -130,11 +133,12 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
 
     @Override
-    public void onStockRemoved(int pos) {
-        Stock s = getListFragment().removeStockFromList(pos);
+    public void onStockRemoved() {
+        Stock s = getListFragment().removeStockFromList(selectionPosition);
         StocksDataSource dataSource = new StocksDataSource(this);
         dataSource.open();
         dataSource.deleteStock(s.id);
         dataSource.close();
+        selectionPosition = getListFragment().setNextSelected();
     }
 }

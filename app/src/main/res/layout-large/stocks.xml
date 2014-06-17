@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
     <fragment android:name="dan.stocks.StockListFragment"
         android:id="@+id/stock_list_fragment"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/grid_element" />

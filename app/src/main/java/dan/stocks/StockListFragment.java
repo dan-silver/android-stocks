@@ -16,11 +16,44 @@ import java.util.List;
  */
 public class StockListFragment extends ListFragment {
     boolean mDualPane;
-    int mCurCheckPosition = 0;
+    static int mCurCheckPosition = 0;
     OnStockSelectedListener mCallback;
 
     public StockListFragment() {
     }
+
+    public void setStockSelected(final int p) {
+        getListView().post(new Runnable() {
+            @Override
+            public void run() {
+                getListView().requestFocusFromTouch();
+                getListView().setSelection(p);
+                getListView().requestFocus();
+                mCurCheckPosition = p;
+                mCallback.onStockSelected(mCurCheckPosition, ((ImageAdapter) getListAdapter()).stocks.get(mCurCheckPosition).id);
+            }
+        });
+    }
+
+    public int setNextSelected() {
+        if (getListView().getCount() > mCurCheckPosition) {
+            setStockSelected(mCurCheckPosition);
+            return mCurCheckPosition;
+        } else if (getListView().getCount() > 0) {
+            setStockSelected(mCurCheckPosition - 1);
+            return mCurCheckPosition - 1;
+        }
+        return -1;
+    }
+
+
+    public int setLastSelected() {
+        int i = getListAdapter().getCount() - 1;
+        setStockSelected(i);
+        return i;
+    }
+
+
     // The container Activity must implement this interface so the frag can deliver messages
     public interface OnStockSelectedListener {
         /** Called by HeadlinesFragment when a list item is selected */
@@ -76,8 +109,9 @@ public class StockListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         mCallback.onStockSelected(position, ((ImageAdapter) getListAdapter()).stocks.get(position).id);
         v.setSelected(true);
-        Log.d("STOCKS", "" + position);
+        mCurCheckPosition = position;
     }
+
     public void updateListWithNewStock(Stock s) {
         if (getListAdapter() != null) {
             ((ImageAdapter) getListAdapter()).add(s);

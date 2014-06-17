@@ -18,7 +18,6 @@ public class StockDetailFragment extends Fragment {
     final static String CURRENT_POSITION = "mPosition";
     OnStockRemoveListener removeCallback;
     Stock currentStock;
-    int mCurrentPosition = -1;
 
     @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,24 +47,25 @@ public class StockDetailFragment extends Fragment {
         removeStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeCallback.onStockRemoved(mCurrentPosition);
-                mCurrentPosition = -1;
+                removeCallback.onStockRemoved();
+//                mCurrentPosition = -1;
             }
         });
     }
+
     public interface OnStockRemoveListener {
-        public void onStockRemoved(int stockDbId);
+        public void onStockRemoved();
     }
+
     public void updateArticleView(int pos, int stockDbId) {
-        if (pos != -1) mCurrentPosition = pos;
-        Log.v("STOCKS", "updating article view");
+//        if (pos != -1) mCurrentPosition = pos;
         if (stockDbId != -1) {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
             StocksDataSource dataSource = new StocksDataSource(getActivity());
             dataSource.open();
             currentStock = dataSource.getStock(stockDbId);
-            Log.v("STOCKS", "the company name is " + currentStock.companyName);
-            Log.v("STOCKS", "the ticker is " + currentStock.ticker);
+//            Log.v("STOCKS", "the company name is " + currentStock.companyName);
+//            Log.v("STOCKS", "the ticker is " + currentStock.ticker);
             dataSource.close();
             tickerTV.setText(currentStock.ticker);
         }
@@ -76,7 +76,7 @@ public class StockDetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         // Save the current article selection in case we need to recreate the fragment
-        outState.putInt(STOCK_DB_ID, mCurrentPosition);
+//        outState.putInt(STOCK_DB_ID, mCurrentPosition);
     }
     @Override
     public void onAttach(Activity activity) {
