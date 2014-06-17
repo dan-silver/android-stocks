@@ -14,9 +14,7 @@ import android.widget.TextView;
  */
 public class StockDetailFragment extends Fragment {
     final static String STOCK_DB_ID = "stock_db_id";
-    final static String CURRENT_POSITION = "mPosition";
     OnStockRemoveListener removeCallback;
-    Stock currentStock;
 
     @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +31,7 @@ public class StockDetailFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             // Set article based on argument passed in
-            updateArticleView(-1, args.getInt(STOCK_DB_ID));
+            updateArticleView(args.getInt(STOCK_DB_ID));
 
             //mCurrentPosition = args.getInt(CURRENT_POSITION);
         }
@@ -56,7 +54,7 @@ public class StockDetailFragment extends Fragment {
         public void onStockRemoved();
     }
 
-    public void updateArticleView(int pos, long id) {
+    public void updateArticleView(long id) {
         TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
 
         Stock s = Stock.findById(Stock.class, id);
