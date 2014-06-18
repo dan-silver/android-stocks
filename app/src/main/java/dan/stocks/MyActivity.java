@@ -18,7 +18,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Stock.deleteAll(Stock.class);
         setContentView(R.layout.stocks);
 
         if (inSinglePaneLayout()) { //single pane

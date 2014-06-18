@@ -55,10 +55,10 @@ public class StockDetailFragment extends Fragment {
     }
 
     public void updateArticleView(long id) {
-        TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
 
         Stock s = Stock.findById(Stock.class, id);
         if (s != null) {
+            TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
             tickerTV.setText(s.ticker);
         }
      }

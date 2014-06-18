@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,12 +37,9 @@ public class StockListFragment extends ListFragment {
     public void setNextSelected() {
         if (getListView().getCount() > mCurCheckPosition) {
             setStockSelected(mCurCheckPosition);
-//            return mCurCheckPosition;
         } else if (getListView().getCount() > 0) {
             setStockSelected(mCurCheckPosition - 1);
-//            return mCurCheckPosition - 1;
         }
-//        return -1;
     }
 
 
