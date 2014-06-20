@@ -35,7 +35,6 @@ import java.util.TimerTask;
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener{
     public static final String LOG_TAG = "STOCKS_LOG";
-    int selectionPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             // Add the fragment to the 'fragment_container' FrameLayout
             getFragmentManager().beginTransaction().add(R.id.fragment_container, listFragment).commit();
         }
-        setupFetchMarketAlarm();
+        //setupFetchMarketAlarm();
     }
 
     public class AlarmReceiver extends TimerTask {
@@ -112,7 +111,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         s.save();
         getListFragment().updateListWithNewStock(s);
         s.getStockCompanyInfo((ImageAdapter) getListFragment().getListAdapter());
-        selectionPosition = getListFragment().setLastSelected();
+        getListFragment().setLastSelected();
     }
 
     public String randomStockName() {
@@ -141,7 +140,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
 
     @Override
     public void onStockSelected(int pos, long id) {
-        selectionPosition = pos;
         // The user selected the headline of an article from the HeadlinesFragment
 
         // Capture the article fragment from the activity layout
@@ -174,8 +172,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
 
     @Override
     public void onStockRemoved() {
-        getListFragment().removeStockFromList(selectionPosition).delete();
-        getListFragment().setNextSelected();
+        getListFragment().removeStockFromList().delete();
     }
 
     void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {

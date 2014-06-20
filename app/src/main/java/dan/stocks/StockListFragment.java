@@ -128,10 +128,10 @@ public class StockListFragment extends ListFragment {
         }
     }
 
-    public Stock removeStockFromList(int pos) {
+    public void removeStockFromList() {
         if (getListAdapter() != null) {
-            return ((ImageAdapter) getListAdapter()).remove(pos);
+            ((ImageAdapter) getListAdapter()).remove(mCurCheckPosition);
+            setNextSelected();
         }
-        return null;
     }
 }
