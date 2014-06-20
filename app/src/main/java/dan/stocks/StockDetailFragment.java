@@ -33,7 +33,7 @@ public class StockDetailFragment extends Fragment {
             v += 0.2;
             data[i] = new GraphViewData(i, Math.sin(v));
         }
-        GraphView graphView = new LineGraphView(getActivity().getApplicationContext(), "GraphViewDemo");
+        GraphView graphView = new LineGraphView(getActivity().getApplicationContext(), "");
 // add data
         graphView.addSeries(new GraphViewSeries(data));
 // set view port, start=2, size=40

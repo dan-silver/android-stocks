@@ -32,6 +32,13 @@ public class Stock extends SugarRecord<Stock> {
         this.ticker = ticker.toUpperCase();
     }
 
+    void updateMarketInfo(ImageAdapter adapter, double change, double changePercent, double lastPrice) {
+        this.change = change;
+        this.changePercent = changePercent;
+        this.lastPrice = lastPrice;
+        if (adapter != null) adapter.notifyDataSetChanged();
+    }
+
     void getStockCompanyInfo(final ImageAdapter adapter) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams("ticker", this.ticker);
