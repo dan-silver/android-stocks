@@ -1,13 +1,13 @@
 package dan.stocks;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.orm.SugarRecord;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +21,7 @@ public class Stock extends SugarRecord<Stock> {
     public String ticker;
     public double change;
     public double changePercent;
+    public double apiId;
 
     public Stock(Context c) {
         super(c);
@@ -28,23 +29,24 @@ public class Stock extends SugarRecord<Stock> {
 
     public Stock(Context c, String ticker) {
         super(c);
-        this.ticker = ticker;
+        this.ticker = ticker.toUpperCase();
     }
 
-    void updateStockPrice(final ImageAdapter adapter) {
+    void getStockCompanyInfo(final ImageAdapter adapter) {
         AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams("symbol", this.ticker);
-        client.get("http://dev.markitondemand.com/Api/v2/Quote/json", params, new AsyncHttpResponseHandler() {
+        RequestParams params = new RequestParams("ticker", this.ticker);
+        client.get("http://enigmatic-reaches-7783.herokuapp.com/stock.json", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
-                    Log.v("STOCK", response);
                     res = new JSONObject(response);
-                    lastPrice = res.getDouble("LastPrice");
-                    change = res.getDouble("Change");
-                    changePercent = res.getDouble("ChangePercent");
-                    companyName = res.getString("Name");
+                    //lastPrice = res.getDouble("LastPrice");
+                    //change = res.getDouble("Change");
+                    //changePercent = res.getDouble("ChangePercent");
+                    companyName = res.getString("company");
+
+                    apiId = res.getInt("apiId");
                     save();
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {

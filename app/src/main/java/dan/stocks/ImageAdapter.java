@@ -77,10 +77,12 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         return Double.toString(Double.valueOf(new DecimalFormat("###.##").format(val)));
     }
 
-    public void refreshStocks() {
-        for(Stock s : stocks) {
-            s.updateStockPrice(this);
-        }
+    public void update(int position, Stock s) {
+    }
+
+    public void resetWithData(int mCurCheckPosition, List<Stock> stocks) {
+        clear();
+        addAll(stocks);
     }
 
     static class StockHolder

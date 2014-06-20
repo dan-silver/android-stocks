@@ -7,7 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GraphViewSeries;
+import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.jjoe64.graphview.LineGraphView;
 
 /**
  * Created by dan on 6/15/14.
@@ -18,7 +24,27 @@ public class StockDetailFragment extends Fragment {
 
     @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.stock_detail, container, false);
+        View view = inflater.inflate(R.layout.stock_detail, container, false);
+        // init example series data
+        int num = 150;
+        GraphViewData[] data = new GraphViewData[num];
+        double v=0;
+        for (int i=0; i<num; i++) {
+            v += 0.2;
+            data[i] = new GraphViewData(i, Math.sin(v));
+        }
+        GraphView graphView = new LineGraphView(getActivity().getApplicationContext(), "GraphViewDemo");
+// add data
+        graphView.addSeries(new GraphViewSeries(data));
+// set view port, start=2, size=40
+        graphView.setViewPort(2, 40);
+        graphView.setScrollable(true);
+// optional - activate scaling / zooming
+        graphView.setScalable(true);
+
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.graph);
+        layout.addView(graphView);
+        return view;
     }
     @Override
     public void onStart() {

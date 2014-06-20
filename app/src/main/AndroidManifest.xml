@@ -19,9 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name="dan.stocks.AlarmReceiver"
+            android:exported="false">
+        </receiver>
         <!--Database setup-->
         <meta-data android:name="DATABASE" android:value="sugar_stocks.db" />
-        <meta-data android:name="VERSION" android:value="2" />
+        <meta-data android:name="VERSION" android:value="1" />
         <meta-data android:name="QUERY_LOG" android:value="true" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="dan.stocks" />
         <!--End database setup-->

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class StockListFragment extends ListFragment {
     }
 
     public void setStockSelected(final int p) {
+        if (p == -1) return;
         getListView().post(new Runnable() {
             @Override
             public void run() {
@@ -47,6 +49,11 @@ public class StockListFragment extends ListFragment {
         int i = getListAdapter().getCount() - 1;
         setStockSelected(i);
         return i;
+    }
+
+    public void resetDataWith(List<Stock> stocks) {
+        ((ImageAdapter) getListAdapter()).resetWithData(mCurCheckPosition, stocks);
+        setStockSelected(mCurCheckPosition);
     }
 
 
@@ -115,15 +122,16 @@ public class StockListFragment extends ListFragment {
         }
     }
 
+    public void updateStock(int position, Stock s) {
+        if (getListAdapter() != null) {
+            ((ImageAdapter) getListAdapter()).update(position, s);
+        }
+    }
+
     public Stock removeStockFromList(int pos) {
         if (getListAdapter() != null) {
             return ((ImageAdapter) getListAdapter()).remove(pos);
         }
         return null;
     }
-
-    public void refreshStocks() {
-        ((ImageAdapter) getListAdapter()).refreshStocks();
-    }
-
 }

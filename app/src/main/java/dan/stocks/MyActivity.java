@@ -1,14 +1,36 @@
 package dan.stocks;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.orm.query.Select;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener{
@@ -18,7 +40,9 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
+
 
         if (inSinglePaneLayout()) { //single pane
             StockListFragment listFragment = new StockListFragment();
@@ -30,6 +54,24 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             // Add the fragment to the 'fragment_container' FrameLayout
             getFragmentManager().beginTransaction().add(R.id.fragment_container, listFragment).commit();
         }
+        setupFetchMarketAlarm();
+    }
+
+    public class AlarmReceiver extends TimerTask {
+        @Override
+        public void run() {
+            Log.v("STOCKS", "refreshStocks()");
+            refreshStocks();
+        }
+    }
+
+
+    private void setupFetchMarketAlarm() {
+        Timer myTimer = new Timer();
+        AlarmReceiver myTimerTask= new AlarmReceiver();
+        myTimer.scheduleAtFixedRate(myTimerTask,0,8000);
+
+
     }
 
     @Override
@@ -58,19 +100,23 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
 
     public void refreshStocks() {
-        getListFragment().refreshStocks();
+        StringBuilder str = new StringBuilder();
+        for (Stock s : Stock.listAll(Stock.class)) {
+            str.append(s.apiId).append(",");
+        }
+
+        fetchStockMarketOverview(((ImageAdapter) getListFragment().getListAdapter()), str.toString());
     }
     public void createStock() {
-//        StocksDataSource dataSource = new StocksDataSource(this);
         Stock s = new Stock(getApplicationContext(), randomStockName());
         s.save();
-//        dataSource.close();
         getListFragment().updateListWithNewStock(s);
+        s.getStockCompanyInfo((ImageAdapter) getListFragment().getListAdapter());
         selectionPosition = getListFragment().setLastSelected();
     }
 
     public String randomStockName() {
-        int i = new Random().nextInt(6);
+        int i = new Random().nextInt(7);
         switch (i) {
             case 0: return "T";
             case 1: return "VZ";
@@ -79,6 +125,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             case 4: return "DISH";
             case 5: return "GOOG";
             case 6: return "DELL";
+            case 7: return "MSFT";
             default: return "DTV";
         }
     }
@@ -129,5 +176,48 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     public void onStockRemoved() {
         getListFragment().removeStockFromList(selectionPosition).delete();
         getListFragment().setNextSelected();
+    }
+
+    void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams("id", apiIds);
+        client.get("http://enigmatic-reaches-7783.herokuapp.com/stocks.json", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONArray res = new JSONArray(response);
+                    for (int i = 0; i < res.length(); i++) {
+                        JSONObject stock = res.getJSONObject(i);
+                        Stock s = Stock.find(Stock.class, "api_id = ?", Integer.toString(stock.getInt("id"))).get(0);
+                        s.change = stock.getDouble("change");
+                        s.changePercent = stock.getDouble("changePercent");
+                        s.lastPrice = stock.getDouble("lastPrice");
+                        s.save();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                ListView listView = getListFragment().getListView();
+
+                //@Todo not setting selected after update
+                final int index = listView.getSelectedItemPosition();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.clear();
+                        adapter.addAll(Stock.listAll(Stock.class));
+                        getListFragment().setStockSelected(index);
+
+                    }
+                });
+
+
+//                LinearLayout v = (LinearLayout) getListFragment().getListAdapter().getView(0, view, parent);
+                        //resetDataWith(Stock.listAll(Stock.class));
+
+            }
+        });
+
     }
 }
