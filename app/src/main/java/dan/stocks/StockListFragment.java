@@ -31,7 +31,7 @@ public class StockListFragment extends ListFragment {
                 getListView().setSelection(p);
                 getListView().requestFocus();
                 mCurCheckPosition = p;
-                mCallback.onStockSelected(mCurCheckPosition, ((ImageAdapter) getListAdapter()).stocks.get(mCurCheckPosition).getId());
+                mCallback.onStockSelected(mCurCheckPosition, getListImageAdapter().stocks.get(mCurCheckPosition).getId());
             }
         });
     }
@@ -52,7 +52,7 @@ public class StockListFragment extends ListFragment {
     }
 
     public void resetDataWith(List<Stock> stocks) {
-        ((ImageAdapter) getListAdapter()).resetWithData(mCurCheckPosition, stocks);
+        getListImageAdapter().resetWithData(mCurCheckPosition, stocks);
         setStockSelected(mCurCheckPosition);
     }
 
@@ -118,19 +118,21 @@ public class StockListFragment extends ListFragment {
 
     public void updateListWithNewStock(Stock s) {
         if (getListAdapter() != null) {
-            ((ImageAdapter) getListAdapter()).add(s);
+            getListImageAdapter().add(s);
         }
     }
-
+    public ImageAdapter getListImageAdapter() {
+        return (ImageAdapter) getListAdapter();
+    }
     public void updateStock(int position, Stock s) {
         if (getListAdapter() != null) {
-            ((ImageAdapter) getListAdapter()).update(position, s);
+            getListImageAdapter().update(position, s);
         }
     }
 
     public void removeStockFromList() {
         if (getListAdapter() != null) {
-            ((ImageAdapter) getListAdapter()).remove(mCurCheckPosition);
+            getListImageAdapter().remove(mCurCheckPosition).delete();
             setNextSelected();
         }
     }

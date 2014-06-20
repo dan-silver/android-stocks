@@ -104,13 +104,13 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             str.append(s.apiId).append(",");
         }
 
-        fetchStockMarketOverview(((ImageAdapter) getListFragment().getListAdapter()), str.toString());
+        fetchStockMarketOverview((getListFragment().getListImageAdapter()), str.toString());
     }
     public void createStock() {
         Stock s = new Stock(getApplicationContext(), randomStockName());
         s.save();
         getListFragment().updateListWithNewStock(s);
-        s.getStockCompanyInfo((ImageAdapter) getListFragment().getListAdapter());
+        s.getStockCompanyInfo(getListFragment().getListImageAdapter());
         getListFragment().setLastSelected();
     }
 
@@ -172,7 +172,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
 
     @Override
     public void onStockRemoved() {
-        getListFragment().removeStockFromList().delete();
+        getListFragment().removeStockFromList();
     }
 
     void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {
@@ -205,16 +205,9 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
                         adapter.clear();
                         adapter.addAll(Stock.listAll(Stock.class));
                         getListFragment().setStockSelected(index);
-
                     }
                 });
-
-
-//                LinearLayout v = (LinearLayout) getListFragment().getListAdapter().getView(0, view, parent);
-                        //resetDataWith(Stock.listAll(Stock.class));
-
             }
         });
-
     }
 }
