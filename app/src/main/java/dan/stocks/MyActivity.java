@@ -186,53 +186,54 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         client.get("http://enigmatic-reaches-7783.herokuapp.com/stocks.json", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
-                final ArrayList<Integer> apiIds = new ArrayList<Integer>();
-                JSONArray res;
                 try {
-                    res = new JSONArray(response);
-
-                    //iterate results, add their api ids to the array list
-                    for (int i = 0; i < res.length(); i++) {
-                        final JSONObject stock = res.getJSONObject(i);
-                        apiIds.add(stock.getInt("id"));
-                    }
+                    processMarketData(adapter, response);
                 } catch (JSONException e) {
-                    res = null;
                     e.printStackTrace();
                 }
-                    try {
-                        for (int i = 0; i < adapter.getCount(); i++) {
-                            final Stock existing_reference = adapter.getItem(i);
-                            //search apiIds for this stock to get the position of the results in res[]
-                            int resPosition = -1;
-                            for (int z = 0; z < apiIds.size(); z++) {
-                                if (existing_reference.apiId == apiIds.get(z))
-                                    resPosition = z;
-                            }
-                            if (resPosition == -1) return;
-                            if (res == null) return;
-                            final JSONObject parsed_stock = res.getJSONObject(resPosition);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        int position = getListFragment().mCurCheckPosition;
-                                        existing_reference.updateMarketInfo(adapter,
-                                                parsed_stock.getDouble("change"),
-                                                parsed_stock.getDouble("changePercent"),
-                                                parsed_stock.getDouble("lastPrice"));
-                                        getListFragment().setStockSelected(position);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-
-                        }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
             }
-   }
+        });
+    }
+
+    private void processMarketData(final ImageAdapter adapter, String response) throws JSONException {
+        final ArrayList<Integer> apiIds = new ArrayList<Integer>();
+        JSONArray res = new JSONArray(response);
+        //iterate results, add their api ids to the array list
+        for (int i = 0; i < res.length(); i++) {
+            apiIds.add(res.getJSONObject(i).getInt("id"));
+        }
+        for (int i = 0; i < adapter.getCount(); i++) {
+            final Stock existing_reference = adapter.getItem(i);
+            //search apiIds for this stock to get the position of the results in res[]
+
+            int resPosition = findIntegerPositionInList(existing_reference.apiId, apiIds);
+            if (resPosition == -1) continue;
+            final JSONObject parsed_stock = res.getJSONObject(resPosition);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        int position = getListFragment().mCurCheckPosition;
+                        existing_reference.updateMarketInfo(adapter,
+                                parsed_stock.getDouble("change"),
+                                parsed_stock.getDouble("changePercent"),
+                                parsed_stock.getDouble("lastPrice"));
+                        getListFragment().setStockSelected(position);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        }
+    }
+
+    int findIntegerPositionInList(double searchKey, ArrayList<Integer> list) {
+        int position = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (searchKey == list.get(i))
+                position = i;
+        }
+        return position;
+    }
+}
