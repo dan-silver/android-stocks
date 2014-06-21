@@ -46,7 +46,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             // Add the fragment to the 'fragment_container' FrameLayout
             getFragmentManager().beginTransaction().add(R.id.fragment_container, listFragment).commit();
         }
-        setupFetchMarketAlarm();
+//        setupFetchMarketAlarm();
     }
 
     public class AlarmReceiver extends TimerTask {
