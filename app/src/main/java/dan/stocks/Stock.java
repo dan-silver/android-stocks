@@ -36,6 +36,7 @@ public class Stock extends SugarRecord<Stock> {
         this.change = change;
         this.changePercent = changePercent;
         this.lastPrice = lastPrice;
+        save();
         if (adapter != null) adapter.notifyDataSetChanged();
     }
 

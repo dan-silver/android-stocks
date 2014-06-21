@@ -1,6 +1,7 @@
 package dan.stocks;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -76,6 +77,23 @@ public class StockDetailFragment extends Fragment {
 
             TextView companyNameTV = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
             companyNameTV .setText(s.companyName);
+
+            TextView lastPriceTV = (TextView) getActivity().findViewById(R.id.stock_detail_last_price);
+            lastPriceTV.setText(ImageAdapter.RoundTo2Decimals(s.lastPrice));
+
+            TextView changeTV = (TextView) getActivity().findViewById(R.id.stock_detail_change);
+            changeTV.setText(ImageAdapter.RoundTo2Decimals(s.change));
+
+            TextView changePercentTV = (TextView) getActivity().findViewById(R.id.stock_detail_change_percent);
+            changePercentTV.setText("("+ImageAdapter.RoundTo2Decimals(s.changePercent)+")");
+
+            if (s.changePercent >= 0) {
+                changePercentTV.setTextColor(Color.parseColor("#3d9400"));
+                changeTV.setTextColor(Color.parseColor("#3d9400"));
+            } else {
+                changePercentTV.setTextColor(Color.parseColor("#dd4b39"));
+                changeTV.setTextColor(Color.parseColor("#dd4b39"));
+            }
 
             fetchStockHistory(s.apiId);
         }

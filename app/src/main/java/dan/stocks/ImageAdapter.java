@@ -73,7 +73,7 @@ public class ImageAdapter extends ArrayAdapter<Stock> {
         return row;
     }
 
-    String RoundTo2Decimals(double val) {
+    public static String RoundTo2Decimals(double val) {
         return Double.toString(Double.valueOf(new DecimalFormat("###.##").format(val)));
     }
 
