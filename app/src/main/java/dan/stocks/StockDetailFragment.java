@@ -72,7 +72,11 @@ public class StockDetailFragment extends Fragment {
         Stock s = Stock.findById(Stock.class, id);
         if (s != null) {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
-            tickerTV.setText(s.ticker);
+            tickerTV.setText("("+s.ticker+")");
+
+            TextView companyNameTV = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
+            companyNameTV .setText(s.companyName);
+
             fetchStockHistory(s.apiId);
         }
     }
@@ -116,13 +120,11 @@ public class StockDetailFragment extends Fragment {
     private void updateGraph(GraphViewData[] data) {
         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.graph);
         if (layout != null) {
-            GraphView graphView = new LineGraphView(getActivity().getApplicationContext(), "");
+            GraphView graphView = new LineGraphView(getActivity(), "");
             graphView.addSeries(new GraphViewSeries(data));
-//            graphView.setViewPort(2, 40); // set view port, start=2, size=40
-//
-//            // optional - activate scaling / zooming
-            graphView.setScrollable(true);
+//          optional - activate scaling / zooming
             graphView.setScalable(true);
+            graphView.setScrollable(true);
             final android.text.format.DateFormat df = new android.text.format.DateFormat();
             graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
                 @Override
@@ -132,6 +134,7 @@ public class StockDetailFragment extends Fragment {
                     return null; // let graphview generate Y-axis label for us
                 }
             });
+            graphView.setViewPort(data[0].getX(), data[data.length - 1].getX() - data[0].getX());
             layout.addView(graphView);
         }
     }

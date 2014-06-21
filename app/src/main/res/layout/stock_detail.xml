@@ -13,14 +13,22 @@
         android:layout_height="fill_parent">
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Details about a stock..."
+            android:textSize="40dp"
+            android:text="Verizon Communications"
+            android:id="@+id/stock_detail_company_name"
+            android:textColor="@color/dark_background_text"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:text="(VZ)"
             android:id="@+id/stock_detail_ticker"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_toRightOf="@id/stock_detail_company_name"
+            android:layout_alignBottom="@id/stock_detail_company_name"
+            android:layout_marginLeft="10dp"
             android:textColor="@color/dark_background_text"/>
 
         <Button

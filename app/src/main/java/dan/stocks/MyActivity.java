@@ -131,6 +131,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             default:
                 return "DTV";
         }
+
     }
 
     public boolean inSinglePaneLayout() {
@@ -210,12 +211,10 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
                 @Override
                 public void run() {
                     try {
-                        int position = getListFragment().mCurCheckPosition;
                         existing_reference.updateMarketInfo(adapter,
                                 parsed_stock.getDouble("change"),
                                 parsed_stock.getDouble("changePercent"),
                                 parsed_stock.getDouble("lastPrice"));
-                        getListFragment().setStockSelected(position);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
