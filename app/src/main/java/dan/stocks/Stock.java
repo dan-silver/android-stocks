@@ -21,7 +21,7 @@ public class Stock extends SugarRecord<Stock> {
     public String ticker;
     public double change;
     public double changePercent;
-    public double apiId;
+    public int apiId;
 
     public Stock(Context c) {
         super(c);

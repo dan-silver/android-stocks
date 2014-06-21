@@ -14,6 +14,15 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.LineGraphView;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * Created by dan on 6/15/14.
@@ -23,33 +32,13 @@ public class StockDetailFragment extends Fragment {
     OnStockRemoveListener removeCallback;
 
     @Override
-     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.stock_detail, container, false);
-        // init example series data
-        int num = 150;
-        GraphViewData[] data = new GraphViewData[num];
-        double v=0;
-        for (int i=0; i<num; i++) {
-            v += 0.2;
-            data[i] = new GraphViewData(i, Math.sin(v));
-        }
-        GraphView graphView = new LineGraphView(getActivity().getApplicationContext(), "");
-// add data
-        graphView.addSeries(new GraphViewSeries(data));
-// set view port, start=2, size=40
-        graphView.setViewPort(2, 40);
-        graphView.setScrollable(true);
-// optional - activate scaling / zooming
-        graphView.setScalable(true);
-
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.graph);
-        layout.addView(graphView);
-        return view;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.stock_detail, container, false);;
     }
+
     @Override
     public void onStart() {
         super.onStart();
-
         // During startup, check if there are arguments passed to the fragment.
         // onStart is a good place to do this because the layout has already been
         // applied to the fragment at this point so we can safely call the method
@@ -59,21 +48,16 @@ public class StockDetailFragment extends Fragment {
             // Set article based on argument passed in
             updateArticleView(args.getInt(STOCK_DB_ID));
 
-            //mCurrentPosition = args.getInt(CURRENT_POSITION);
         }
-//          else if (mCurrentPosition != -1) {
-//            // Set article based on saved instance state defined during onCreateView
-//            updateArticleView(mCurrentPosition);
-//        }
 
         Button removeStock = (Button) getActivity().findViewById(R.id.remove_stock);
         removeStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 removeCallback.onStockRemoved();
-//                mCurrentPosition = -1;
             }
         });
+
     }
 
     public interface OnStockRemoveListener {
@@ -81,26 +65,67 @@ public class StockDetailFragment extends Fragment {
     }
 
     public void updateArticleView(long id) {
-
+        removeGraph();
         Stock s = Stock.findById(Stock.class, id);
         if (s != null) {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
             tickerTV.setText(s.ticker);
+            fetchStockHistory(s.apiId);
         }
-     }
+    }
+
+    public void fetchStockHistory(int apiId) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://enigmatic-reaches-7783.herokuapp.com/stocks/" + apiId + "/prices.json", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String response) {
+                GraphViewData[] data;
+                try {
+                    JSONArray res = new JSONArray(response);
+                    data = new GraphViewData[res.length()];
+                    for (int i = 0; i < res.length(); i++) {
+                        JSONObject o = res.getJSONObject(i);
+//                        data[i] = new GraphViewData(o.getLong("datetime"), o.getDouble("value"));
+                        data[i] = new GraphViewData(i, o.getDouble("value"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    data = null;
+                }
+                updateGraph(data);
+            }
+        });
+    }
+
+    private void removeGraph() {
+        LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.graph);
+        if (layout != null) {
+            layout.removeAllViews();
+        }
+    }
+
+    private void updateGraph(GraphViewData[] data) {
+        LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.graph);
+        if (layout != null) {
+            GraphView graphView = new LineGraphView(getActivity().getApplicationContext(), "");
+            graphView.addSeries(new GraphViewSeries(data));
+            graphView.setViewPort(2, 40); // set view port, start=2, size=40
+
+            // optional - activate scaling / zooming
+            graphView.setScrollable(true);
+            graphView.setScalable(true);
+            layout.addView(graphView);
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        // Save the current article selection in case we need to recreate the fragment
-//        outState.putInt(STOCK_DB_ID, mCurrentPosition);
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
         try {
             removeCallback = (OnStockRemoveListener) activity;
         } catch (ClassCastException e) {

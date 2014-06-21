@@ -52,7 +52,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     public class AlarmReceiver extends TimerTask {
         @Override
         public void run() {
-            Log.v("STOCKS", "refreshStocks()");
             refreshStocks();
         }
     }
@@ -196,19 +195,17 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     }
 
     private void processMarketData(final ImageAdapter adapter, String response) throws JSONException {
-        final ArrayList<Integer> apiIds = new ArrayList<Integer>();
         JSONArray res = new JSONArray(response);
-        //iterate results, add their api ids to the array list
+        HashMap<Integer, JSONObject> hash = new HashMap<Integer, JSONObject>(); //keys are apiIds, values are JSON objects
         for (int i = 0; i < res.length(); i++) {
-            apiIds.add(res.getJSONObject(i).getInt("id"));
+            hash.put(res.getJSONObject(i).getInt("id"), res.getJSONObject(i));
         }
         for (int i = 0; i < adapter.getCount(); i++) {
             final Stock existing_reference = adapter.getItem(i);
             //search apiIds for this stock to get the position of the results in res[]
 
-            int resPosition = findIntegerPositionInList(existing_reference.apiId, apiIds);
-            if (resPosition == -1) continue;
-            final JSONObject parsed_stock = res.getJSONObject(resPosition);
+            final JSONObject parsed_stock = hash.get(existing_reference.apiId);
+            if (parsed_stock == null) break;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -226,14 +223,5 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             });
 
         }
-    }
-
-    int findIntegerPositionInList(double searchKey, ArrayList<Integer> list) {
-        int position = -1;
-        for (int i = 0; i < list.size(); i++) {
-            if (searchKey == list.get(i))
-                position = i;
-        }
-        return position;
     }
 }
