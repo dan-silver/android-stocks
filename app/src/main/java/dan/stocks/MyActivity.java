@@ -7,8 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -18,16 +17,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener {
+public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
     public static final String LOG_TAG = "STOCKS_LOG";
 
     @Override
@@ -52,6 +48,11 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
 //        setupFetchMarketAlarm();
     }
 
+    @Override
+    public void isEmpty() {
+        Log.v(LOG_TAG, "the list is empty, switch out fragments");
+    }
+
     public class AlarmReceiver extends TimerTask {
         @Override
         public void run() {
@@ -59,13 +60,10 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         }
     }
 
-
     private void setupFetchMarketAlarm() {
         Timer myTimer = new Timer();
         AlarmReceiver myTimerTask = new AlarmReceiver();
         myTimer.scheduleAtFixedRate(myTimerTask, 0, 8000);
-
-
     }
 
     @Override

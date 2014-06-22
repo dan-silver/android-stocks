@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,7 +17,8 @@ import java.util.List;
 public class StockListFragment extends ListFragment {
     boolean mDualPane;
     static int mCurCheckPosition = 0;
-    OnStockSelectedListener mCallback;
+    private OnStockSelectedListener mCallback;
+    private ListEmptyListener listener;
 
     public StockListFragment() {
     }
@@ -84,8 +84,8 @@ public class StockListFragment extends ListFragment {
                                      Stock s = getListImageAdapter().remove(position);
                                      Toast.makeText(getActivity().getApplicationContext(), s.getDisplayName() + " has been removed",
                                              Toast.LENGTH_LONG).show();
-
                                              s.delete();
+                                            if (getListImageAdapter().isEmpty()) listener.isEmpty();
                                  }
                              }
                          });
@@ -116,6 +116,11 @@ public class StockListFragment extends ListFragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
+        try {
+            listener = (ListEmptyListener) activity;
+        } catch (ClassCastException castException) {
+            /** The activity does not implement the listener. */
+        }
     }
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -131,5 +136,9 @@ public class StockListFragment extends ListFragment {
     }
     public ImageAdapter getListImageAdapter() {
         return (ImageAdapter) getListAdapter();
+    }
+
+    public interface ListEmptyListener {
+        public void isEmpty();
     }
 }
