@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 /**
  * Created by dan on 6/22/14.
  */
-public class LandingFragment extends Fragment {
+public class StockSearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.landing_fragment, container, false);

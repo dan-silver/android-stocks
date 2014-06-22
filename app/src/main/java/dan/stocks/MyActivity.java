@@ -51,6 +51,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     public void isEmpty() {
         Log.v(LOG_TAG, "the list is empty, switch out fragments");
+        setContentView(R.layout.stocks_search);
     }
 
     public class AlarmReceiver extends TimerTask {
