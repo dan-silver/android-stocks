@@ -142,16 +142,4 @@ public class StockListFragment extends ListFragment {
     public ImageAdapter getListImageAdapter() {
         return (ImageAdapter) getListAdapter();
     }
-    public void updateStock(int position, Stock s) {
-        if (getListAdapter() != null) {
-            getListImageAdapter().update(position, s);
-        }
-    }
-
-    public void removeStockFromList() {
-        if (getListAdapter() != null) {
-            getListImageAdapter().remove(mCurCheckPosition).delete();
-            setNextSelected();
-        }
-    }
 }
