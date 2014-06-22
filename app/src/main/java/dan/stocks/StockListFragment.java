@@ -83,6 +83,24 @@ public class StockListFragment extends ListFragment {
             // Make sure our UI is in the correct state.
 //            showDetails(mCurCheckPosition);
         }
+
+        ListView listView = getListView();
+        SwipeDismissListViewTouchListener touchListener =
+                 new SwipeDismissListViewTouchListener(getListView(),
+                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                             @Override
+                             public boolean canDismiss(int position) {
+                                 return true;
+                             }
+
+                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                 for (int position : reverseSortedPositions) {
+                                     getListImageAdapter().remove(position).delete();
+                                 }
+                             }
+                         });
+         listView.setOnTouchListener(touchListener);
+         listView.setOnScrollListener(touchListener.makeScrollListener());
     }
     @Override
     public void onStart() {

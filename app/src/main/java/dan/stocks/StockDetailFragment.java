@@ -34,7 +34,6 @@ import java.util.HashMap;
  */
 public class StockDetailFragment extends Fragment {
     final static String STOCK_DB_ID = "stock_db_id";
-    OnStockRemoveListener removeCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,19 +52,6 @@ public class StockDetailFragment extends Fragment {
             // Set article based on argument passed in
             updateArticleView(args.getInt(STOCK_DB_ID));
         }
-
-        Button removeStock = (Button) getActivity().findViewById(R.id.remove_stock);
-        removeStock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                removeCallback.onStockRemoved();
-            }
-        });
-
-    }
-
-    public interface OnStockRemoveListener {
-        public void onStockRemoved();
     }
 
     public void updateArticleView(long id) {
@@ -162,14 +148,4 @@ public class StockDetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            removeCallback = (OnStockRemoveListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
 }

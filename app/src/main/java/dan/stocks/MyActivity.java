@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ListView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -26,12 +27,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockDetailFragment.OnStockRemoveListener {
+public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener {
     public static final String LOG_TAG = "STOCKS_LOG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getActionBar().hide();
         //getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
 
@@ -102,7 +105,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     public void createStock() {
         Stock s = new Stock(getApplicationContext(), randomStockTicker());
         s.save();
-        long id = s.getId();
         getListFragment().updateListWithNewStock(s);
         s.getStockCompanyInfo(getListFragment().getListImageAdapter());
         s.updateMarketInfo(getListFragment().getListImageAdapter(), 4, 5, 6);
@@ -173,11 +175,6 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             // Commit the transaction
             transaction.commit();
         }
-    }
-
-    @Override
-    public void onStockRemoved() {
-        getListFragment().removeStockFromList();
     }
 
     void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {
