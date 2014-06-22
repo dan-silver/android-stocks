@@ -40,6 +40,11 @@ public class Stock extends SugarRecord<Stock> {
         if (adapter != null) adapter.notifyDataSetChanged();
     }
 
+    public String getDisplayName() {
+        if (this.companyName != null) return companyName;
+        return ticker;
+    }
+
     void getStockCompanyInfo(final ImageAdapter adapter) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams("ticker", this.ticker);

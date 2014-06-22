@@ -33,8 +33,8 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getActionBar().hide();
+//        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+//        getActionBar().hide();
         //getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
 

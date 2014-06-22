@@ -109,7 +109,7 @@ public class StockDetailFragment extends Fragment {
                 }
 
 
-                updateGraph(data);
+                if (data != null) updateGraph(data);
             }
         });
     }

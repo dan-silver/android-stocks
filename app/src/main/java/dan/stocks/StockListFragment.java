@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -80,7 +81,11 @@ public class StockListFragment extends ListFragment {
 
                              public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                  for (int position : reverseSortedPositions) {
-                                     getListImageAdapter().remove(position).delete();
+                                     Stock s = getListImageAdapter().remove(position);
+                                     Toast.makeText(getActivity().getApplicationContext(), s.getDisplayName() + " has been removed",
+                                             Toast.LENGTH_LONG).show();
+
+                                             s.delete();
                                  }
                              }
                          });
