@@ -36,26 +36,11 @@ public class StockListFragment extends ListFragment {
         });
     }
 
-    public void setNextSelected() {
-        if (getListView().getCount() > mCurCheckPosition) {
-            setStockSelected(mCurCheckPosition);
-        } else if (getListView().getCount() > 0) {
-            setStockSelected(mCurCheckPosition - 1);
-        }
-    }
-
-
     public int setLastSelected() {
         int i = getListAdapter().getCount() - 1;
         setStockSelected(i);
         return i;
     }
-
-    public void resetDataWith(List<Stock> stocks) {
-        getListImageAdapter().resetWithData(mCurCheckPosition, stocks);
-        setStockSelected(mCurCheckPosition);
-    }
-
 
     // The container Activity must implement this interface so the frag can deliver messages
     public interface OnStockSelectedListener {
