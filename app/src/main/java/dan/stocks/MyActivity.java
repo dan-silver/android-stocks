@@ -1,13 +1,11 @@
 package dan.stocks;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -18,12 +16,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
+public class MyActivity extends FragmentActivity implements StockSearchFragment.FinishedSearchListener, StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
     public static final String LOG_TAG = "STOCKS_LOG";
 
     @Override
@@ -33,26 +30,50 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
 //        getActionBar().hide();
         //getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
+        populateDualPaneFragments();
+    }
 
+    private void populateDualPaneFragments() {
+        getFragmentManager().beginTransaction().add(R.id.stock_detail_fragment, new StockDetailFragment()).commit();
+        getFragmentManager().beginTransaction().add(R.id.stock_list_fragment, new StockListFragment()).commit();
+    }
 
-        if (inSinglePaneLayout()) { //single pane
-            StockListFragment listFragment = new StockListFragment();
+    private void clearDualPaneFragments() {
+        removeFragment(getFragmentManager().findFragmentById(R.id.stock_detail_fragment));
+        removeFragment(getFragmentManager().findFragmentById(R.id.stock_list_fragment));
+    }
 
-            // In case this activity was started with special instructions from an Intent,
-            // pass the Intent's extras to the fragment as arguments
-            listFragment.setArguments(getIntent().getExtras());
+    private void populateSearchFragment() {
+        getFragmentManager().beginTransaction().add(R.id.stock_search_fragment, new StockSearchFragment()).commit();
+    }
 
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getFragmentManager().beginTransaction().add(R.id.fragment_container, listFragment).commit();
-        }
-//        setupFetchMarketAlarm();
+    private void removeFragment(Fragment frag) {
+        if (frag != null) getFragmentManager().beginTransaction().remove(frag);
     }
 
     @Override
     public void isEmpty() {
-        Log.v(LOG_TAG, "the list is empty, switch out fragments");
-        setContentView(R.layout.stocks_search);
+        switchToSearchView();
     }
+
+    public void switchToSearchView() {
+        clearSearchFragment();
+        setContentView(R.layout.stocks_search);
+        populateSearchFragment();
+    }
+
+    private void clearSearchFragment() {
+        removeFragment(getFragmentManager().findFragmentById(R.id.stock_search_fragment));
+    }
+
+    @Override
+    public void searchResult(String ticker) {
+        clearDualPaneFragments();
+        createStock(ticker);
+        setContentView(R.layout.stocks);
+        populateDualPaneFragments();
+    }
+
 
     public class AlarmReceiver extends TimerTask {
         @Override
@@ -83,7 +104,7 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
             case R.id.action_settings:
                 return true;
             case R.id.new_stock:
-                createStock();
+                switchToSearchView();
                 return true;
             case R.id.refresh:
                 refreshStocks();
@@ -101,38 +122,13 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         fetchStockMarketOverview((getListFragment().getListImageAdapter()), str.toString());
     }
 
-    public void createStock() {
-        Stock s = new Stock(getApplicationContext(), randomStockTicker());
+    public void createStock(String ticker) {
+        Stock s = new Stock(getApplicationContext(), ticker);
         s.save();
         getListFragment().updateListWithNewStock(s);
         s.getStockCompanyInfo(getListFragment().getListImageAdapter());
         s.updateMarketInfo(getListFragment().getListImageAdapter(), 4, 5, 6);
         getListFragment().setLastSelected();
-    }
-
-    public String randomStockTicker() {
-        int i = new Random().nextInt(7);
-        switch (i) {
-            case 0:
-                return "T";
-            case 1:
-                return "VZ";
-            case 2:
-                return "S";
-            case 3:
-                return "CMCSA";
-            case 4:
-                return "DISH";
-            case 5:
-                return "GOOG";
-            case 6:
-                return "DELL";
-            case 7:
-                return "MSFT";
-            default:
-                return "DTV";
-        }
-
     }
 
     public boolean inSinglePaneLayout() {
@@ -146,34 +142,8 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
 
     @Override
     public void onStockSelected(int pos, long id) {
-        // The user selected the headline of an article from the HeadlinesFragment
-
-        // Capture the article fragment from the activity layout
-        StockDetailFragment detailFragment = (StockDetailFragment) getSupportFragmentManager().findFragmentById(R.id.stock_detail_fragment);
-
-        if (detailFragment != null) {
-            // If article frag is available, we're in two-pane layout...
-            // Call a method in the ArticleFragment to update its content
-            detailFragment.updateArticleView(id);
-
-        } else {
-            // If the frag is not available, we're in the one-pane layout and must swap frags...
-
-            // Create fragment and give it an argument for the selected article
-            StockDetailFragment newFragment = new StockDetailFragment();
-            Bundle args = new Bundle();
-            args.putLong(StockDetailFragment.STOCK_DB_ID, id);
-            newFragment.setArguments(args);
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.fragment_container, newFragment);
-            transaction.addToBackStack(null);
-
-            // Commit the transaction
-            transaction.commit();
-        }
+        StockDetailFragment detailFragment = (StockDetailFragment) getFragmentManager().findFragmentById(R.id.stock_detail_fragment);
+        detailFragment.updateArticleView(id);
     }
 
     void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {

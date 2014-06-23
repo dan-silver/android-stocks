@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="400dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_height="match_parent"
+    android:background="@color/dark_background">
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView" />
+        android:background="@color/dark_background">
+
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/stock_search_edit_text"
+            android:hint="@string/stock_search_input_hint"
+            android:textColorHint="@color/dark_background_text"
+            android:textColor="@color/dark_background_text"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:lines="1" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:id="@+id/stock_search_execute" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/search_results_list_view"
+        android:divider="@null" />
 </LinearLayout>

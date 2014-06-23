@@ -55,7 +55,7 @@ public class StockListFragment extends ListFragment {
         Log.v(MyActivity.LOG_TAG, "There are " + stocks.size() + " stocks.");
         setListAdapter(new ImageAdapter(getActivity(), R.layout.grid_element, stocks));
 
-        View detailsFrame = getActivity().findViewById(R.id.stock_detail_fragment);
+        View detailsFrame = getView().findViewById(R.id.stock_detail_fragment);
         mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
         if (savedInstanceState != null) {

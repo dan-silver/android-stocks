@@ -1,9 +1,9 @@
 package dan.stocks;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +50,7 @@ public class StockDetailFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             // Set article based on argument passed in
-            updateArticleView(args.getInt(STOCK_DB_ID));
+//            updateArticleView(args.getInt(STOCK_DB_ID));
         }
     }
 
@@ -59,29 +59,31 @@ public class StockDetailFragment extends Fragment {
         Stock s = Stock.findById(Stock.class, id);
         if (s != null) {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
-            tickerTV.setText("("+s.ticker+")");
+            if (tickerTV != null) {
+                tickerTV.setText("(" + s.ticker + ")");
 
-            TextView companyNameTV = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
-            companyNameTV .setText(s.companyName);
+                TextView companyNameTV = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
+                companyNameTV.setText(s.companyName);
 
-            TextView lastPriceTV = (TextView) getActivity().findViewById(R.id.stock_detail_last_price);
-            lastPriceTV.setText(ImageAdapter.RoundTo2Decimals(s.lastPrice));
+                TextView lastPriceTV = (TextView) getActivity().findViewById(R.id.stock_detail_last_price);
+                lastPriceTV.setText(ImageAdapter.RoundTo2Decimals(s.lastPrice));
 
-            TextView changeTV = (TextView) getActivity().findViewById(R.id.stock_detail_change);
-            changeTV.setText(ImageAdapter.RoundTo2Decimals(s.change));
+                TextView changeTV = (TextView) getActivity().findViewById(R.id.stock_detail_change);
+                changeTV.setText(ImageAdapter.RoundTo2Decimals(s.change));
 
-            TextView changePercentTV = (TextView) getActivity().findViewById(R.id.stock_detail_change_percent);
-            changePercentTV.setText("("+ImageAdapter.RoundTo2Decimals(s.changePercent)+")");
+                TextView changePercentTV = (TextView) getActivity().findViewById(R.id.stock_detail_change_percent);
+                changePercentTV.setText("(" + ImageAdapter.RoundTo2Decimals(s.changePercent) + ")");
 
-            if (s.changePercent >= 0) {
-                changePercentTV.setTextColor(Color.parseColor("#3d9400"));
-                changeTV.setTextColor(Color.parseColor("#3d9400"));
-            } else {
-                changePercentTV.setTextColor(Color.parseColor("#dd4b39"));
-                changeTV.setTextColor(Color.parseColor("#dd4b39"));
+                if (s.changePercent >= 0) {
+                    changePercentTV.setTextColor(Color.parseColor("#3d9400"));
+                    changeTV.setTextColor(Color.parseColor("#3d9400"));
+                } else {
+                    changePercentTV.setTextColor(Color.parseColor("#dd4b39"));
+                    changeTV.setTextColor(Color.parseColor("#dd4b39"));
+                }
+
+                fetchStockHistory(s.apiId);
             }
-
-            fetchStockHistory(s.apiId);
         }
     }
 
