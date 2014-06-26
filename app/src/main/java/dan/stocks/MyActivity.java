@@ -1,7 +1,5 @@
 package dan.stocks;
 
-
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -19,9 +17,9 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class MyActivity extends FragmentActivity implements StockSearchFragment.FinishedSearchListener, StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
     public static final String LOG_TAG = "STOCKS_LOG";
+    public static final String API_URL = "http://104.131.249.221/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +32,8 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
     }
 
     private void populateDualPaneFragments() {
-        getFragmentManager().beginTransaction().add(R.id.stock_detail_fragment, new StockDetailFragment()).commit();
+        getFragmentManager().beginTransaction().add(R.id.fragment_detail_large, new StockDetailFragment()).commit();
         getFragmentManager().beginTransaction().add(R.id.stock_list_fragment, new StockListFragment()).commit();
-    }
-
-    private void clearDualPaneFragments() {
-        removeFragment(getFragmentManager().findFragmentById(R.id.stock_detail_fragment));
-        removeFragment(getFragmentManager().findFragmentById(R.id.stock_list_fragment));
-    }
-
-    private void populateSearchFragment() {
-        getFragmentManager().beginTransaction().add(R.id.stock_search_fragment, new StockSearchFragment()).commit();
-    }
-
-    private void removeFragment(Fragment frag) {
-        if (frag != null) getFragmentManager().beginTransaction().remove(frag);
     }
 
     @Override
@@ -57,21 +42,17 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
     }
 
     public void switchToSearchView() {
-        clearSearchFragment();
-        setContentView(R.layout.stocks_search);
-        populateSearchFragment();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_detail_large, new StockSearchFragment()).commit();
     }
 
-    private void clearSearchFragment() {
-        removeFragment(getFragmentManager().findFragmentById(R.id.stock_search_fragment));
+    public void switchToStockDetailView() {
+        getFragmentManager().beginTransaction().replace(R.id.fragment_detail_large, new StockDetailFragment()).commit();
     }
 
     @Override
-    public void searchResult(String ticker) {
-        clearDualPaneFragments();
-        createStock(ticker);
-        setContentView(R.layout.stocks);
-        populateDualPaneFragments();
+    public void searchResult(Stock stock) {
+        switchToStockDetailView();
+        createStock(stock);
     }
 
 
@@ -122,12 +103,8 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
         fetchStockMarketOverview((getListFragment().getListImageAdapter()), str.toString());
     }
 
-    public void createStock(String ticker) {
-        Stock s = new Stock(getApplicationContext(), ticker);
-        s.save();
-        getListFragment().updateListWithNewStock(s);
-        s.getStockCompanyInfo(getListFragment().getListImageAdapter());
-        s.updateMarketInfo(getListFragment().getListImageAdapter(), 4, 5, 6);
+    public void createStock(Stock stock) {
+        getListFragment().updateListWithNewStock(stock);
         getListFragment().setLastSelected();
     }
 
@@ -142,14 +119,14 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
 
     @Override
     public void onStockSelected(int pos, long id) {
-        StockDetailFragment detailFragment = (StockDetailFragment) getFragmentManager().findFragmentById(R.id.stock_detail_fragment);
+        StockDetailFragment detailFragment = (StockDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_detail_large);
         detailFragment.updateArticleView(id);
     }
 
     void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams("id", apiIds);
-        client.get("http://enigmatic-reaches-7783.herokuapp.com/stocks.json", params, new AsyncHttpResponseHandler() {
+        client.get(API_URL + "stocks.json", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
                 try {

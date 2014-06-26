@@ -32,15 +32,15 @@ public class StockListFragment extends ListFragment {
                 getListView().setSelection(p);
                 getListView().requestFocus();
                 mCurCheckPosition = p;
-                mCallback.onStockSelected(mCurCheckPosition, getListImageAdapter().stocks.get(mCurCheckPosition).getId());
+                if (getListImageAdapter().stocks != null)
+                    mCallback.onStockSelected(mCurCheckPosition, getListImageAdapter().stocks.get(mCurCheckPosition).getId());
             }
         });
     }
 
-    public int setLastSelected() {
+    public void setLastSelected() {
         int i = getListAdapter().getCount() - 1;
         setStockSelected(i);
-        return i;
     }
 
     // The container Activity must implement this interface so the frag can deliver messages
@@ -55,7 +55,7 @@ public class StockListFragment extends ListFragment {
         Log.v(MyActivity.LOG_TAG, "There are " + stocks.size() + " stocks.");
         setListAdapter(new ImageAdapter(getActivity(), R.layout.grid_element, stocks));
 
-        View detailsFrame = getView().findViewById(R.id.stock_detail_fragment);
+        View detailsFrame = getView().findViewById(R.id.fragment_detail_large);
         mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
         if (savedInstanceState != null) {
@@ -98,7 +98,7 @@ public class StockListFragment extends ListFragment {
 
         // When in two-pane layout, set the listview to highlight the selected list item
         // (We do this during onStart because at the point the listview is available.)
-        if (getFragmentManager().findFragmentById(R.id.stock_detail_fragment) != null) {
+        if (getFragmentManager().findFragmentById(R.id.fragment_detail_large) != null) {
             getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         }
         getListView().setBackgroundColor(Color.parseColor("#323232"));

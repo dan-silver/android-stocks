@@ -89,7 +89,7 @@ public class StockDetailFragment extends Fragment {
 
     public void fetchStockHistory(int apiId) {
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://enigmatic-reaches-7783.herokuapp.com/stocks/" + apiId + "/prices.json", new AsyncHttpResponseHandler() {
+        client.get(MyActivity.API_URL + "stocks/" + apiId + "/prices.json", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
                 GraphViewData[] data;
@@ -109,7 +109,6 @@ public class StockDetailFragment extends Fragment {
                     e.printStackTrace();
                     data = null;
                 }
-
 
                 if (data != null) updateGraph(data);
             }

@@ -44,29 +44,4 @@ public class Stock extends SugarRecord<Stock> {
         if (this.companyName != null) return companyName;
         return ticker;
     }
-
-    void getStockCompanyInfo(final ImageAdapter adapter) {
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams("ticker", this.ticker);
-        client.get("http://enigmatic-reaches-7783.herokuapp.com/stock.json", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String response) {
-                JSONObject res;
-                try {
-                    res = new JSONObject(response);
-                    //lastPrice = res.getDouble("LastPrice");
-                    //change = res.getDouble("Change");
-                    //changePercent = res.getDouble("ChangePercent");
-                    companyName = res.getString("company");
-
-                    apiId = res.getInt("apiId");
-                    save();
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
 }

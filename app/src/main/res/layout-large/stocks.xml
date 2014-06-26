@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/dark_background">
 
     <FrameLayout
         android:id="@+id/stock_list_fragment"
@@ -12,7 +13,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent" />
     <FrameLayout
-        android:id="@+id/stock_detail_fragment"
+        android:id="@+id/fragment_detail_large"
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="match_parent" />
