@@ -26,7 +26,7 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
         super.onCreate(savedInstanceState);
 //        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 //        getActionBar().hide();
-        //getApplicationContext().deleteDatabase("sugar_stocks.db");
+        getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
         populateDualPaneFragments();
     }
@@ -157,7 +157,10 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
                         existing_reference.updateMarketInfo(adapter,
                                 parsed_stock.getDouble("change"),
                                 parsed_stock.getDouble("changePercent"),
-                                parsed_stock.getDouble("lastPrice"));
+                                parsed_stock.getDouble("lastPrice"),
+                                parsed_stock.getDouble("dayHigh"),
+                                parsed_stock.getDouble("dayLow"),
+                                parsed_stock.getString("cap"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

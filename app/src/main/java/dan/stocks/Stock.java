@@ -21,6 +21,9 @@ public class Stock extends SugarRecord<Stock> {
     public String ticker;
     public double change;
     public double changePercent;
+    public double dayLow;
+    public double dayHigh;
+    public String marketCap;
     public int apiId;
 
     public Stock(Context c) {
@@ -32,10 +35,13 @@ public class Stock extends SugarRecord<Stock> {
         this.ticker = ticker.toUpperCase();
     }
 
-    void updateMarketInfo(ImageAdapter adapter, double change, double changePercent, double lastPrice) {
+    void updateMarketInfo(ImageAdapter adapter, double change, double changePercent, double lastPrice, double high, double low, String cap) {
         this.change = change;
         this.changePercent = changePercent;
         this.lastPrice = lastPrice;
+        this.dayHigh = high;
+        this.dayLow = low;
+        this.marketCap = cap;
         save();
         if (adapter != null) adapter.notifyDataSetChanged();
     }

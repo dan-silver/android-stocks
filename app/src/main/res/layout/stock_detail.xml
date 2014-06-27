@@ -1,81 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="15dp"
-    android:background="@color/dark_background">
+    android:background="@color/dark_background"
+    android:baselineAligned="false">
 
-    <RelativeLayout
-        android:layout_weight="4.3"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:gravity="bottom">
-        <TextView
-            android:layout_width="wrap_content"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="Verizon Communications"
-            android:id="@+id/stock_detail_company_name"
-            android:textColor="@color/dark_background_text"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="(VZ)"
-            android:id="@+id/stock_detail_ticker"
-            android:layout_toRightOf="@id/stock_detail_company_name"
-            android:layout_alignBottom="@id/stock_detail_company_name"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/dark_background_text"/>
-    </RelativeLayout>
-    <RelativeLayout
-    android:layout_weight="4"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:text="144.543"
-        android:id="@+id/stock_detail_last_price"
-        android:textColor="@color/dark_background_text"/>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="21dp"
-        android:text="-5.89"
-        android:id="@+id/stock_detail_change"
-        android:layout_toRightOf="@id/stock_detail_last_price"
-        android:layout_alignBottom="@id/stock_detail_last_price"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/dark_background_text"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="21dp"
-            android:text="(-50.89)%"
-            android:id="@+id/stock_detail_change_percent"
-            android:layout_toRightOf="@id/stock_detail_change"
-            android:layout_alignBottom="@id/stock_detail_change"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/dark_background_text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="40sp"
+                        android:text="Verizon Communications"
+                        android:id="@+id/stock_detail_company_name"
+                        android:textColor="@color/dark_background_text" />
 
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_weight="2"
-        android:orientation="vertical"
-        android:id="@+id/graph"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></LinearLayout>
-    <LinearLayout
-        android:layout_weight="4"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="40sp"
+                        android:text="(VZ)"
+                        android:id="@+id/stock_detail_ticker"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/dark_background_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="25sp"
+                            android:text="144.543"
+                            android:id="@+id/stock_detail_last_price"
+                            android:textColor="@color/dark_background_text" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="21sp"
+                            android:text="-5.89"
+                            android:id="@+id/stock_detail_change"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/dark_background_text" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="21sp"
+                            android:text="(-50.89)%"
+                            android:id="@+id/stock_detail_change_percent"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/dark_background_text" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="21sp"
+                        android:text="Range"
+                        android:textColor="@color/dark_background_text" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="21sp"
+                        android:gravity="right"
+                        android:text="571.85 - 582.45"
+                        android:textColor="@color/dark_background_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="21sp"
+                        android:text="Open"
+                        android:textColor="@color/dark_background_text" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="21sp"
+                        android:gravity="right"
+                        android:text="575.22"
+                        android:textColor="@color/dark_background_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="21sp"
+                        android:text="Market Cap"
+                        android:textColor="@color/dark_background_text" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="21sp"
+                        android:gravity="right"
+                        android:text="395.75B"
+                        android:textColor="@color/dark_background_text" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:id="@+id/graph"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"></LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"></LinearLayout>
+
+    </LinearLayout>
+
 
 </LinearLayout>
