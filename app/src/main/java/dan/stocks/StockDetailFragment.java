@@ -74,6 +74,15 @@ public class StockDetailFragment extends Fragment {
                 TextView changePercentTV = (TextView) getActivity().findViewById(R.id.stock_detail_change_percent);
                 changePercentTV.setText("(" + ImageAdapter.RoundTo2Decimals(s.changePercent) + ")");
 
+                TextView rangeTV = (TextView) getActivity().findViewById(R.id.stock_detail_range);
+                rangeTV.setText(ImageAdapter.RoundTo2Decimals(s.dayLow) + " - " + ImageAdapter.RoundTo2Decimals(s.dayHigh));
+
+                TextView openTV = (TextView) getActivity().findViewById(R.id.stock_detail_open);
+                openTV.setText(ImageAdapter.RoundTo2Decimals(s.getOpen()));
+
+                TextView capTV = (TextView) getActivity().findViewById(R.id.stock_detail_cap);
+                capTV.setText(s.marketCap);
+
                 if (s.changePercent >= 0) {
                     changePercentTV.setTextColor(Color.parseColor("#3d9400"));
                     changeTV.setTextColor(Color.parseColor("#3d9400"));
@@ -123,7 +132,9 @@ public class StockDetailFragment extends Fragment {
     }
 
     private void updateGraph(GraphViewData[] data) {
-        LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.graph);
+        Activity activity = getActivity();
+        if (activity == null) return;
+        LinearLayout layout = (LinearLayout) activity.findViewById(R.id.graph);
         if (layout != null) {
             GraphView graphView = new LineGraphView(getActivity(), "");
             graphView.addSeries(new GraphViewSeries(data));

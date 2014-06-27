@@ -15,6 +15,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
+            android:baselineAligned="false"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -32,7 +33,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="40sp"
+                        android:textSize="35sp"
                         android:text="Verizon Communications"
                         android:id="@+id/stock_detail_company_name"
                         android:textColor="@color/dark_background_text" />
@@ -40,7 +41,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="40sp"
+                        android:textSize="35sp"
                         android:text="(VZ)"
                         android:id="@+id/stock_detail_ticker"
                         android:layout_marginLeft="10dp"
@@ -91,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1.7">
 
                 <LinearLayout
                     android:layout_height="wrap_content"
@@ -100,16 +101,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp"
+                        android:textSize="19sp"
                         android:text="Range"
                         android:textColor="@color/dark_background_text" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp"
+                        android:textSize="19sp"
                         android:gravity="right"
                         android:text="571.85 - 582.45"
+                        android:id="@+id/stock_detail_range"
                         android:textColor="@color/dark_background_text" />
                 </LinearLayout>
 
@@ -120,16 +122,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp"
+                        android:textSize="19sp"
                         android:text="Open"
                         android:textColor="@color/dark_background_text" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp"
+                        android:textSize="19sp"
                         android:gravity="right"
                         android:text="575.22"
+                        android:id="@+id/stock_detail_open"
                         android:textColor="@color/dark_background_text" />
                 </LinearLayout>
 
@@ -140,16 +143,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp"
+                        android:textSize="19sp"
                         android:text="Market Cap"
                         android:textColor="@color/dark_background_text" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp"
+                        android:textSize="19sp"
                         android:gravity="right"
                         android:text="395.75B"
+                        android:id="@+id/stock_detail_cap"
                         android:textColor="@color/dark_background_text" />
                 </LinearLayout>
             </LinearLayout>

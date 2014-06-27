@@ -50,4 +50,8 @@ public class Stock extends SugarRecord<Stock> {
         if (this.companyName != null) return companyName;
         return ticker;
     }
+
+    public double getOpen() {
+        return lastPrice - change;
+    }
 }

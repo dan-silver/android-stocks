@@ -85,6 +85,9 @@ public class StockSearchFragment extends Fragment {
                     s.changePercent = o.getDouble("changePercent");
                     s.lastPrice = o.getDouble("lastPrice");
                     s.ticker = o.getString("ticker");
+                    s.dayLow = o.getDouble("dayLow");
+                    s.dayHigh = o.getDouble("dayHigh");
+                    s.marketCap = o.getString("cap");
                     s.save();
 
                 } catch (JSONException e) {
