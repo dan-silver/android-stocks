@@ -1,5 +1,6 @@
 package dan.stocks;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -20,13 +21,15 @@ import java.util.TimerTask;
 public class MyActivity extends FragmentActivity implements StockSearchFragment.FinishedSearchListener, StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
     public static final String LOG_TAG = "STOCKS_LOG";
     public static final String API_URL = "http://104.131.249.221/";
+    StockSearchFragment searchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 //        getActionBar().hide();
-        getApplicationContext().deleteDatabase("sugar_stocks.db");
+        searchFragment = new StockSearchFragment();
+//        getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
         populateDualPaneFragments();
     }
@@ -42,16 +45,20 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
     }
 
     public void switchToSearchView() {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_detail_large, new StockSearchFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_detail_large, searchFragment).commit();
     }
 
-    public void switchToStockDetailView() {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_detail_large, new StockDetailFragment()).commit();
+    public void switchToStockDetailView(long stock_id) {
+        StockDetailFragment detailFragment = new StockDetailFragment();
+        Bundle args = new Bundle();
+        args.putLong(StockDetailFragment.STOCK_DB_ID, stock_id);
+        detailFragment.setArguments(args);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_detail_large, detailFragment).commit();
     }
 
     @Override
     public void searchResult(Stock stock) {
-        switchToStockDetailView();
+        switchToStockDetailView(stock.getId());
         createStock(stock);
     }
 
@@ -119,8 +126,12 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
 
     @Override
     public void onStockSelected(int pos, long id) {
-        StockDetailFragment detailFragment = (StockDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_detail_large);
-        detailFragment.updateArticleView(id);
+        Fragment frag = getFragmentManager().findFragmentById(R.id.fragment_detail_large);
+        if (frag == searchFragment) {
+            switchToStockDetailView(id);
+        } else {
+            ((StockDetailFragment) frag).updateArticleView(id);
+        }
     }
 
     void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {

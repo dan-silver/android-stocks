@@ -163,8 +163,16 @@
             android:layout_weight="2"
             android:orientation="vertical"
             android:id="@+id/graph"
+            android:gravity="center"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"></LinearLayout>
+            android:layout_height="fill_parent">
+            <ProgressBar
+                android:id="@+id/graph_loading_icon"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"/>
+            </LinearLayout>
 
         <LinearLayout
             android:layout_weight="4"

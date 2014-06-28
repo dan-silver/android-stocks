@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.CustomLabelFormatter;
@@ -34,6 +35,7 @@ import java.util.HashMap;
  */
 public class StockDetailFragment extends Fragment {
     final static String STOCK_DB_ID = "stock_db_id";
+    ProgressBar loadingIcon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class StockDetailFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        loadingIcon = (ProgressBar) getActivity().findViewById(R.id.graph_loading_icon);
+        loadingIcon.setVisibility(View.VISIBLE);
         // During startup, check if there are arguments passed to the fragment.
         // onStart is a good place to do this because the layout has already been
         // applied to the fragment at this point so we can safely call the method
@@ -50,7 +54,8 @@ public class StockDetailFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             // Set article based on argument passed in
-//            updateArticleView(args.getInt(STOCK_DB_ID));
+            Log.v(MyActivity.LOG_TAG, "ARGS != NULL");
+            updateArticleView(args.getLong(STOCK_DB_ID));
         }
     }
 
@@ -127,17 +132,21 @@ public class StockDetailFragment extends Fragment {
     private void removeGraph() {
         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.graph);
         if (layout != null) {
-            layout.removeAllViews();
+            GraphView gv = (GraphView) layout.findViewWithTag("actual_graph");
+            if (gv != null) layout.removeView(gv);
+            loadingIcon.setVisibility(View.VISIBLE);
         }
     }
 
     private void updateGraph(GraphViewData[] data) {
+        if (data.length == 0) return;
         Activity activity = getActivity();
         if (activity == null) return;
         LinearLayout layout = (LinearLayout) activity.findViewById(R.id.graph);
         if (layout != null) {
             GraphView graphView = new LineGraphView(getActivity(), "");
             graphView.addSeries(new GraphViewSeries(data));
+            graphView.setTag("actual_graph");
 //          optional - activate scaling / zooming
             graphView.setScalable(true);
             graphView.setScrollable(true);
@@ -151,6 +160,7 @@ public class StockDetailFragment extends Fragment {
                 }
             });
             graphView.setViewPort(data[0].getX(), data[data.length - 1].getX() - data[0].getX());
+            loadingIcon.setVisibility(View.GONE);
             layout.addView(graphView);
         }
     }
