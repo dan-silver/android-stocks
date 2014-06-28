@@ -75,26 +75,23 @@ public class StockSearchFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Stock s;
+                Stock s = new Stock(getActivity());
                 try {
                     JSONObject o = array.getJSONObject(position);
-                    s = new Stock(getActivity());
                     s.companyName = o.getString("company");
                     s.apiId = o.getInt("id");
                     s.change = o.getDouble("change");
-                    s.changePercent = o.getDouble("changePercent");
                     s.lastPrice = o.getDouble("lastPrice");
                     s.ticker = o.getString("ticker");
                     s.dayLow = o.getDouble("dayLow");
                     s.dayHigh = o.getDouble("dayHigh");
                     s.marketCap = o.getString("cap");
+                    s.changePercent = o.getDouble("changePercent");
                     s.save();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    s = null;
                 }
-
+                s.save();
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getInputField().getWindowToken(), 0);
                 finishedSearch.searchResult(s);
