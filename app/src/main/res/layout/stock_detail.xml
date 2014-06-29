@@ -33,7 +33,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="35sp"
+                        android:textSize="26sp"
                         android:text="Verizon Communications"
                         android:id="@+id/stock_detail_company_name"
                         android:textColor="@color/dark_background_text" />
@@ -41,10 +41,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="35sp"
+                        android:textSize="26sp"
                         android:text="(VZ)"
                         android:id="@+id/stock_detail_ticker"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="5dp"
                         android:textColor="@color/dark_background_text" />
                 </LinearLayout>
 
@@ -62,7 +62,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="25sp"
+                            android:textSize="23sp"
                             android:text="144.543"
                             android:id="@+id/stock_detail_last_price"
                             android:textColor="@color/dark_background_text" />
@@ -70,7 +70,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="21sp"
+                            android:textSize="20sp"
                             android:text="-5.89"
                             android:id="@+id/stock_detail_change"
                             android:layout_marginLeft="10dp"
@@ -79,7 +79,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="21sp"
+                            android:textSize="20sp"
                             android:text="(-50.89)%"
                             android:id="@+id/stock_detail_change_percent"
                             android:layout_marginLeft="10dp"

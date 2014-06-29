@@ -77,7 +77,7 @@ public class StockDetailFragment extends Fragment {
                 changeTV.setText(ImageAdapter.RoundTo2Decimals(s.change));
 
                 TextView changePercentTV = (TextView) getActivity().findViewById(R.id.stock_detail_change_percent);
-                changePercentTV.setText("(" + ImageAdapter.RoundTo2Decimals(s.changePercent) + ")");
+                changePercentTV.setText("(" + ImageAdapter.RoundTo2Decimals(s.changePercent) + "%)");
 
                 TextView rangeTV = (TextView) getActivity().findViewById(R.id.stock_detail_range);
                 rangeTV.setText(ImageAdapter.RoundTo2Decimals(s.dayLow) + " - " + ImageAdapter.RoundTo2Decimals(s.dayHigh));
