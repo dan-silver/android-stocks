@@ -1,6 +1,8 @@
 package dan.stocks;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -18,17 +20,16 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MyActivity extends FragmentActivity implements StockSearchFragment.FinishedSearchListener, StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
+public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
     public static final String LOG_TAG = "STOCKS_LOG";
     public static final String API_URL = "http://104.131.249.221/";
-    StockSearchFragment searchFragment;
+    public static final int REQUEST_SEARCH_RESULT = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 //        getActionBar().hide();
-        searchFragment = new StockSearchFragment();
 //        getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
         populateDualPaneFragments();
@@ -44,8 +45,11 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
         switchToSearchView();
     }
 
+
+
     public void switchToSearchView() {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_detail_large, searchFragment).commit();
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivityForResult(intent, REQUEST_SEARCH_RESULT);
     }
 
     public void switchToStockDetailView(long stock_id) {
@@ -57,11 +61,13 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
     }
 
     @Override
-    public void searchResult(Stock stock) {
-        switchToStockDetailView(stock.getId());
-        createStock(stock);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SEARCH_RESULT && resultCode == Activity.RESULT_OK) {
+            switchToStockDetailView(data.getLongExtra("STOCK", 0));
+            createStock(Stock.findById(Stock.class, data.getLongExtra("STOCK", 0)));
+        }
     }
-
 
     public class AlarmReceiver extends TimerTask {
         @Override
@@ -127,11 +133,7 @@ public class MyActivity extends FragmentActivity implements StockSearchFragment.
     @Override
     public void onStockSelected(int pos, long id) {
         Fragment frag = getFragmentManager().findFragmentById(R.id.fragment_detail_large);
-        if (frag == searchFragment) {
-            switchToStockDetailView(id);
-        } else {
-            ((StockDetailFragment) frag).updateArticleView(id);
-        }
+        ((StockDetailFragment) frag).updateArticleView(id);
     }
 
     void fetchStockMarketOverview(final ImageAdapter adapter, String apiIds) {

@@ -1,13 +1,14 @@
 package dan.stocks;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,36 +26,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by dan on 6/22/14.
- */
-public class StockSearchFragment extends Fragment {
-    ListView listView;
-    /**
-     * Items entered by the user is stored in this ArrayList variable
-     */
+public class SearchActivity extends Activity {
     ArrayList<String> list = new ArrayList<String>();
-
-    /**
-     * Declaring an ArrayAdapter to set items to ListView
-     */
+    ListView listView;
     ArrayAdapter<String> adapter;
-    private FinishedSearchListener finishedSearch;
     JSONArray array;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.landing_fragment, container, false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.stock_search);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         array = new JSONArray();
-        listView = (ListView) getView().findViewById(R.id.search_results_list_view);
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.stock_search_list_item, R.id.stock_search_list_content, list);
+        listView = (ListView) findViewById(R.id.search_results_list_view);
+        adapter = new ArrayAdapter<String>(this, R.layout.stock_search_list_item, R.id.stock_search_list_content, list);
         listView.setAdapter(adapter);
-        Button search = (Button) getView().findViewById(R.id.stock_search_execute);
+        Button search = (Button) findViewById(R.id.stock_search_execute);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,8 +61,9 @@ public class StockSearchFragment extends Fragment {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Stock s = new Stock(getActivity());
+            public void onItemClick(AdapterView<?> parent,
+                                    View view, int position, long id) {
+                Stock s = new Stock(getApplicationContext());
                 try {
                     JSONObject o = array.getJSONObject(position);
                     s.companyName = o.getString("company");
@@ -92,16 +80,42 @@ public class StockSearchFragment extends Fragment {
                     e.printStackTrace();
                 }
                 s.save();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getInputField().getWindowToken(), 0);
-                finishedSearch.searchResult(s);
+
+                Intent intent = new Intent(getApplicationContext(), MyActivity.class);
+                intent.putExtra("STOCK", s.getId());
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
+    }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        } else if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private EditText getInputField() {
-        return (EditText) getView().findViewById(R.id.stock_search_edit_text);
+        return (EditText) findViewById(R.id.stock_search_edit_text);
     }
 
     private String getSearchInput() {
@@ -131,19 +145,5 @@ public class StockSearchFragment extends Fragment {
             adapter.add(stock.getString("company") + " (" + stock.getString("ticker") + ")");
         }
         adapter.notifyDataSetChanged();
-    }
-
-    public interface FinishedSearchListener {
-        public void searchResult(Stock s);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            finishedSearch = (FinishedSearchListener) activity;
-        } catch (ClassCastException castException) {
-            /** The activity does not implement the listener. */
-        }
     }
 }
