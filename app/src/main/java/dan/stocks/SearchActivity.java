@@ -75,6 +75,7 @@ public class SearchActivity extends Activity {
                     s.dayHigh = o.getDouble("dayHigh");
                     s.marketCap = o.getString("cap");
                     s.changePercent = o.getDouble("changePercent");
+                    s.exchange = o.getString("exchange");
                     s.save();
                 } catch (JSONException e) {
                     e.printStackTrace();

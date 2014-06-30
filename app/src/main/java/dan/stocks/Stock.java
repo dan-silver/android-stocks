@@ -25,14 +25,10 @@ public class Stock extends SugarRecord<Stock> {
     public double dayHigh;
     public String marketCap;
     public int apiId;
+    public String exchange;
 
     public Stock(Context c) {
         super(c);
-    }
-
-    public Stock(Context c, String ticker) {
-        super(c);
-        this.ticker = ticker.toUpperCase();
     }
 
     void updateMarketInfo(ImageAdapter adapter, double change, double changePercent, double lastPrice, double high, double low, String cap) {
@@ -49,6 +45,10 @@ public class Stock extends SugarRecord<Stock> {
     public String getDisplayName() {
         if (this.companyName != null) return companyName;
         return ticker;
+    }
+
+    public String getExchange() {
+        return exchange.replace("NasdaqNM", "Nasdaq").toUpperCase();
     }
 
     public double getOpen() {

@@ -65,7 +65,7 @@ public class StockDetailFragment extends Fragment {
         if (s != null) {
             TextView tickerTV = (TextView) getActivity().findViewById(R.id.stock_detail_ticker);
             if (tickerTV != null) {
-                tickerTV.setText("(" + s.ticker + ")");
+                tickerTV.setText(s.ticker);
 
                 TextView companyNameTV = (TextView) getActivity().findViewById(R.id.stock_detail_company_name);
                 companyNameTV.setText(s.companyName);
@@ -88,6 +88,9 @@ public class StockDetailFragment extends Fragment {
                 TextView capTV = (TextView) getActivity().findViewById(R.id.stock_detail_cap);
                 capTV.setText(s.marketCap);
 
+                TextView exchangeTV = (TextView) getActivity().findViewById(R.id.stock_detail_exchange);
+                exchangeTV.setText(s.getExchange());
+
                 if (s.changePercent >= 0) {
                     changePercentTV.setTextColor(Color.parseColor("#3d9400"));
                     changeTV.setTextColor(Color.parseColor("#3d9400"));
@@ -109,14 +112,10 @@ public class StockDetailFragment extends Fragment {
                 GraphViewData[] data;
                 try {
                     JSONArray res = new JSONArray(response);
-                    DateFormat dateTimeFormatter = DateFormat.getDateTimeInstance();
                     data = new GraphViewData[res.length()];
                     for (int i = 0; i < res.length(); i++) {
                         JSONObject o = res.getJSONObject(i);
                         data[i] = new GraphViewData(o.getLong("datetime") * 1000, o.getDouble("value"));
-                        //data[i] = new GraphViewData(1403367785894l + i * 10000l, i*10);
-                        //data[i] = new GraphViewData(1403367785894l + i * 10000l, i*10);
-                        Log.v("a1a1", dateTimeFormatter.format(new Date((long) data[i].getX())));
                     }
 
                 } catch (JSONException e) {
