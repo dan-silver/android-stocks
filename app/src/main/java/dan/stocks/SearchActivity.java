@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -37,6 +38,7 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stock_search);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        hideNoStocksFoundMessage();
         array = new JSONArray();
         listView = (ListView) findViewById(R.id.search_results_list_view);
         adapter = new ArrayAdapter<String>(this, R.layout.stock_search_list_item, R.id.stock_search_list_content, list);
@@ -145,6 +147,19 @@ public class SearchActivity extends Activity {
             JSONObject stock = (JSONObject) array.get(i);
             adapter.add(stock.getString("company") + " (" + stock.getString("ticker") + ")");
         }
+        hideNoStocksFoundMessage();
         adapter.notifyDataSetChanged();
+        if (adapter.getCount() == 0) {
+            displayNoStocksFoundMessage();
+        }
+    }
+    private void displayNoStocksFoundMessage() {
+        TextView tv = (TextView) findViewById(R.id.stock_search_no_stocks_found);
+        tv.setVisibility(View.VISIBLE);
+    }
+    private void hideNoStocksFoundMessage() {
+        TextView tv = (TextView) findViewById(R.id.stock_search_no_stocks_found);
+        tv.setVisibility(View.GONE);
     }
 }
+

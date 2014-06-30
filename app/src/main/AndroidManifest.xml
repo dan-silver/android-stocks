@@ -37,6 +37,7 @@
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search_activity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
