@@ -36,6 +36,7 @@ import java.util.HashMap;
 public class StockDetailFragment extends Fragment {
     final static String STOCK_DB_ID = "stock_db_id";
     ProgressBar loadingIcon;
+    private int currentlySelected;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,11 +105,13 @@ public class StockDetailFragment extends Fragment {
         }
     }
 
-    public void fetchStockHistory(int apiId) {
+    public void fetchStockHistory(final int apiId) {
+        currentlySelected = apiId;
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(MyActivity.API_URL + "stocks/" + apiId + "/prices.json", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
+                if (apiId != currentlySelected) return;
                 GraphViewData[] data;
                 try {
                     JSONArray res = new JSONArray(response);
