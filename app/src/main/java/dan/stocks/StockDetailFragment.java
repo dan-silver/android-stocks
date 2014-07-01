@@ -36,7 +36,7 @@ import java.util.HashMap;
 public class StockDetailFragment extends Fragment {
     final static String STOCK_DB_ID = "stock_db_id";
     ProgressBar loadingIcon;
-    private int currentlySelected;
+    public int currentlySelected;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class StockDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         loadingIcon = (ProgressBar) getActivity().findViewById(R.id.graph_loading_icon);
-        loadingIcon.setVisibility(View.VISIBLE);
+        hideLoadingIcon();
         // During startup, check if there are arguments passed to the fragment.
         // onStart is a good place to do this because the layout has already been
         // applied to the fragment at this point so we can safely call the method
@@ -136,7 +136,7 @@ public class StockDetailFragment extends Fragment {
         if (layout != null) {
             GraphView gv = (GraphView) layout.findViewWithTag("actual_graph");
             if (gv != null) layout.removeView(gv);
-            loadingIcon.setVisibility(View.VISIBLE);
+            showLoadingIcon();
         }
     }
 
@@ -162,10 +162,19 @@ public class StockDetailFragment extends Fragment {
                 }
             });
             graphView.setViewPort(data[0].getX(), data[data.length - 1].getX() - data[0].getX());
-            loadingIcon.setVisibility(View.GONE);
+            hideLoadingIcon();
             layout.addView(graphView);
         }
     }
+
+    private void showLoadingIcon() {
+        loadingIcon.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingIcon() {
+        loadingIcon.setVisibility(View.GONE);
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

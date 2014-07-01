@@ -18,6 +18,7 @@ public class StockListFragment extends ListFragment {
     boolean mDualPane;
     static int mCurCheckPosition = 0;
     private OnStockSelectedListener mCallback;
+    private ItemRemovedListener item_removed_listener;
     private ListEmptyListener listener;
 
     public StockListFragment() {
@@ -84,8 +85,9 @@ public class StockListFragment extends ListFragment {
                                      Stock s = getListImageAdapter().remove(position);
                                      Toast.makeText(getActivity().getApplicationContext(), s.getDisplayName() + " has been removed",
                                              Toast.LENGTH_LONG).show();
+                                             item_removed_listener.itemRemoved(s.apiId);
                                              s.delete();
-                                            if (getListImageAdapter().isEmpty()) listener.isEmpty();
+                                     if (getListImageAdapter().isEmpty()) listener.isEmpty();
                                  }
                              }
                          });
@@ -118,6 +120,7 @@ public class StockListFragment extends ListFragment {
         }
         try {
             listener = (ListEmptyListener) activity;
+            item_removed_listener = (ItemRemovedListener) activity;
         } catch (ClassCastException castException) {
             /** The activity does not implement the listener. */
         }
@@ -140,5 +143,8 @@ public class StockListFragment extends ListFragment {
 
     public interface ListEmptyListener {
         public void isEmpty();
+    }
+    public interface ItemRemovedListener {
+        public void itemRemoved(long displayedDetailItemApiId);
     }
 }

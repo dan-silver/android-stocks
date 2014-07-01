@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener {
+public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener, StockListFragment.ItemRemovedListener {
     public static final String LOG_TAG = "STOCKS_LOG";
     public static final String API_URL = "http://104.131.249.221/";
     public static final int REQUEST_SEARCH_RESULT = 3;
@@ -66,6 +66,14 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         if (requestCode == REQUEST_SEARCH_RESULT && resultCode == Activity.RESULT_OK) {
             switchToStockDetailView(data.getLongExtra("STOCK", 0));
             createStock(Stock.findById(Stock.class, data.getLongExtra("STOCK", 0)));
+        }
+    }
+
+    @Override
+    public void itemRemoved(long displayedDetailItemApiId) {
+        long displayedDetailItem = getDetailFragment().currentlySelected;
+        if (displayedDetailItemApiId == displayedDetailItem) {
+            getListFragment().setStockSelected(0);
         }
     }
 
@@ -128,6 +136,10 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     public StockListFragment getListFragment() {
         int list_fragment_id = inSinglePaneLayout() ? R.id.fragment_container : R.id.stock_list_fragment;
         return ((StockListFragment) getFragmentManager().findFragmentById(list_fragment_id));
+    }
+
+    public StockDetailFragment getDetailFragment() {
+        return ((StockDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_detail_large));
     }
 
     @Override
