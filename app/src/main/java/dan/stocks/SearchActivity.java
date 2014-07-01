@@ -47,6 +47,7 @@ public class SearchActivity extends Activity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeKeyboard();
                 search();
             }
         });
@@ -55,6 +56,7 @@ public class SearchActivity extends Activity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == event.KEYCODE_ENTER) {
+                    closeKeyboard();
                     search();
                 }
                 return false;
@@ -83,8 +85,6 @@ public class SearchActivity extends Activity {
                     e.printStackTrace();
                 }
                 s.save();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getInputField().getWindowToken(), 0);
 
                 Intent intent = new Intent(getApplicationContext(), MyActivity.class);
                 intent.putExtra("STOCK", s.getId());
@@ -94,6 +94,11 @@ public class SearchActivity extends Activity {
         });
     }
 
+    private void closeKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getInputField().getWindowToken(), 0);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -153,10 +158,12 @@ public class SearchActivity extends Activity {
             displayNoStocksFoundMessage();
         }
     }
+
     private void displayNoStocksFoundMessage() {
         TextView tv = (TextView) findViewById(R.id.stock_search_no_stocks_found);
         tv.setVisibility(View.VISIBLE);
     }
+
     private void hideNoStocksFoundMessage() {
         TextView tv = (TextView) findViewById(R.id.stock_search_no_stocks_found);
         tv.setVisibility(View.GONE);
