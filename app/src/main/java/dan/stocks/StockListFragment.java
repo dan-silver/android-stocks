@@ -19,13 +19,17 @@ public class StockListFragment extends ListFragment {
     static int mCurCheckPosition = 0;
     private OnStockSelectedListener mCallback;
     private ItemRemovedListener item_removed_listener;
-    private ListEmptyListener listener;
+    private ListEmptyListener list_empty_listener;
 
     public StockListFragment() {
     }
 
     public void setStockSelected(final int p) {
         if (p == -1) return;
+        if (getListImageAdapter().getCount() == 0) {
+            list_empty_listener.isEmpty();
+            return;
+        }
         getListView().post(new Runnable() {
             @Override
             public void run() {
@@ -87,7 +91,7 @@ public class StockListFragment extends ListFragment {
                                              Toast.LENGTH_LONG).show();
                                              item_removed_listener.itemRemoved(s.apiId);
                                              s.delete();
-                                     if (getListImageAdapter().isEmpty()) listener.isEmpty();
+                                     if (getListImageAdapter().isEmpty()) list_empty_listener.isEmpty();
                                  }
                              }
                          });
@@ -119,7 +123,7 @@ public class StockListFragment extends ListFragment {
                     + " must implement OnHeadlineSelectedListener");
         }
         try {
-            listener = (ListEmptyListener) activity;
+            list_empty_listener = (ListEmptyListener) activity;
             item_removed_listener = (ItemRemovedListener) activity;
         } catch (ClassCastException castException) {
             /** The activity does not implement the listener. */
