@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 
 public class SearchActivity extends Activity {
     ArrayList<String> list = new ArrayList<String>();
-    ListView listView;
+    GridView listView;
     ArrayAdapter<String> adapter;
     JSONArray array;
 
@@ -40,7 +39,7 @@ public class SearchActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         hideNoStocksFoundMessage();
         array = new JSONArray();
-        listView = (ListView) findViewById(R.id.search_results_list_view);
+        listView = (GridView) findViewById(R.id.search_results);
         adapter = new ArrayAdapter<String>(this, R.layout.stock_search_list_item, R.id.stock_search_list_content, list);
         listView.setAdapter(adapter);
         Button search = (Button) findViewById(R.id.stock_search_execute);

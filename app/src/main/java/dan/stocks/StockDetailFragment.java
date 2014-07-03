@@ -132,11 +132,11 @@ public class StockDetailFragment extends Fragment {
     }
 
     private void removeGraph() {
+        showLoadingIcon();
         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.graph);
         if (layout != null) {
             GraphView gv = (GraphView) layout.findViewWithTag("actual_graph");
             if (gv != null) layout.removeView(gv);
-            showLoadingIcon();
         }
     }
 

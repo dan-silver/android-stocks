@@ -40,8 +40,9 @@
         android:text="No stocks were found."
         android:textColor="@color/dark_background_text"
         android:textSize="20sp"/>
-    <ListView
+    <GridView
         android:layout_width="fill_parent"
+        android:numColumns="2"
         android:layout_height="fill_parent"
-        android:id="@+id/search_results_list_view" />
+        android:id="@+id/search_results" />
 </LinearLayout>
