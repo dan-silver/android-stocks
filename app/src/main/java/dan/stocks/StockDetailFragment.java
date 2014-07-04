@@ -37,6 +37,7 @@ public class StockDetailFragment extends Fragment {
     final static String STOCK_DB_ID = "stock_db_id";
     ProgressBar loadingIcon;
     public int currentlySelected;
+    private GraphViewData[] data;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +59,15 @@ public class StockDetailFragment extends Fragment {
             Log.v(MyActivity.LOG_TAG, "ARGS != NULL");
             updateArticleView(args.getLong(STOCK_DB_ID));
         }
+
+        Button maxZoom = (Button) getActivity().findViewById(R.id.maxZoom);
+        maxZoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                zoomChart();
+                Log.v(MyActivity.LOG_TAG, "Max zooming");
+            }
+        });
     }
 
     public void updateArticleView(long id) {
@@ -112,7 +122,6 @@ public class StockDetailFragment extends Fragment {
             @Override
             public void onSuccess(String response) {
                 if (apiId != currentlySelected) return;
-                GraphViewData[] data;
                 try {
                     JSONArray res = new JSONArray(response);
                     data = new GraphViewData[res.length()];
@@ -120,13 +129,11 @@ public class StockDetailFragment extends Fragment {
                         JSONObject o = res.getJSONObject(i);
                         data[i] = new GraphViewData(o.getLong("datetime") * 1000, o.getDouble("value"));
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    data = null;
                 }
 
-                if (data != null) updateGraph(data);
+                updateGraph();
             }
         });
     }
@@ -140,7 +147,7 @@ public class StockDetailFragment extends Fragment {
         }
     }
 
-    private void updateGraph(GraphViewData[] data) {
+    private void updateGraph() {
         if (data.length == 0) return;
         Activity activity = getActivity();
         if (activity == null) return;
@@ -149,7 +156,6 @@ public class StockDetailFragment extends Fragment {
             GraphView graphView = new LineGraphView(getActivity(), "");
             graphView.addSeries(new GraphViewSeries(data));
             graphView.setTag("actual_graph");
-//          optional - activate scaling / zooming
             graphView.setScalable(true);
             graphView.setScrollable(true);
             final android.text.format.DateFormat df = new android.text.format.DateFormat();
@@ -161,10 +167,17 @@ public class StockDetailFragment extends Fragment {
                     return null; // let graphview generate Y-axis label for us
                 }
             });
-            graphView.setViewPort(data[0].getX(), data[data.length - 1].getX() - data[0].getX());
+            graphView.setViewPort(data[data.length - 1].getX() - 2.62974383e9, 2.62974383e9);
             hideLoadingIcon();
             layout.addView(graphView);
         }
+    }
+
+    public void zoomChart() {
+        LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.graph);
+        GraphView gv = (GraphView) layout.findViewWithTag("actual_graph");
+        gv.setViewPort(data[0].getX(), data[data.length - 1].getX() - data[0].getX());
+        gv.redrawAll();
     }
 
     private void showLoadingIcon() {
