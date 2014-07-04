@@ -109,7 +109,7 @@ public class MyActivity extends FragmentActivity implements ActionBar.OnNavigati
     public void itemRemoved(long displayedDetailItemApiId) {
         long displayedDetailItem = getDetailFragment().currentlySelected;
         if (displayedDetailItemApiId == displayedDetailItem) {
-            getListFragment().setStockSelected(0);
+            getListFragment().setStockSelected(0, true);
         }
     }
 
@@ -167,7 +167,6 @@ public class MyActivity extends FragmentActivity implements ActionBar.OnNavigati
 
     public void createStock(Stock stock) {
         getListFragment().updateListWithNewStock(stock);
-        getListFragment().setLastSelected();
     }
 
     public boolean inSinglePaneLayout() {

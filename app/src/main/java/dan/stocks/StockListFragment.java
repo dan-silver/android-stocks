@@ -24,7 +24,7 @@ public class StockListFragment extends ListFragment {
     public StockListFragment() {
     }
 
-    public void setStockSelected(final int p) {
+    public void setStockSelected(final int p, final boolean performSelectedCallback) {
         if (p == -1) return;
         if (getListImageAdapter().getCount() == 0) {
             list_empty_listener.isEmpty();
@@ -37,15 +37,10 @@ public class StockListFragment extends ListFragment {
                 getListView().setSelection(p);
                 getListView().requestFocus();
                 mCurCheckPosition = p;
-                if (getListImageAdapter().stocks != null)
+                if (performSelectedCallback && getListImageAdapter().stocks != null)
                     mCallback.onStockSelected(mCurCheckPosition, getListImageAdapter().stocks.get(mCurCheckPosition).getId());
             }
         });
-    }
-
-    public void setLastSelected() {
-        int i = getListAdapter().getCount() - 1;
-        setStockSelected(i);
     }
 
     // The container Activity must implement this interface so the frag can deliver messages
@@ -139,6 +134,8 @@ public class StockListFragment extends ListFragment {
     public void updateListWithNewStock(Stock s) {
         if (getListAdapter() != null) {
             getListImageAdapter().add(s);
+            int i = getListAdapter().getCount() - 1;
+            setStockSelected(i, false);
         }
     }
     public ImageAdapter getListImageAdapter() {
