@@ -1,12 +1,16 @@
 package dan.stocks;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -20,7 +24,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MyActivity extends FragmentActivity implements StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener, StockListFragment.ItemRemovedListener {
+public class MyActivity extends FragmentActivity implements ActionBar.OnNavigationListener, StockListFragment.OnStockSelectedListener, StockListFragment.ListEmptyListener, StockListFragment.ItemRemovedListener {
     public static final String LOG_TAG = "STOCKS_LOG";
     public static final String API_URL = "http://104.131.249.221/";
     public static final int REQUEST_SEARCH_RESULT = 3;
@@ -28,11 +32,31 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        assert getActionBar() != null;
+        ActionBar actionBar = getActionBar();
 //        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 //        getActionBar().hide();
 //        getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
         populateDualPaneFragments();
+        actionBar.setDisplayShowTitleEnabled(false);
+        initNavSpinner(actionBar);
+        getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+    }
+
+    private void initNavSpinner(ActionBar actionBar) {
+        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.action_list, R.layout.actionbar_spinner_item);
+        actionBar.setListNavigationCallbacks(mSpinnerAdapter, new ActionBar.OnNavigationListener() {
+            String[] strings = getResources().getStringArray(R.array.action_list);
+
+            @Override
+            public boolean onNavigationItemSelected(int position, long itemId) {
+                Log.v(MyActivity.LOG_TAG, strings[position]);
+                return true;
+            }
+        });
     }
 
     private void populateDualPaneFragments() {
@@ -75,6 +99,11 @@ public class MyActivity extends FragmentActivity implements StockListFragment.On
         if (displayedDetailItemApiId == displayedDetailItem) {
             getListFragment().setStockSelected(0);
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int i, long l) {
+        return false;
     }
 
     public class AlarmReceiver extends TimerTask {

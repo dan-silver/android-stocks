@@ -148,7 +148,7 @@ public class StockDetailFragment extends Fragment {
     }
 
     private void updateGraph() {
-        if (data.length == 0) return;
+        if (data == null || data.length == 0) return;
         Activity activity = getActivity();
         if (activity == null) return;
         LinearLayout layout = (LinearLayout) activity.findViewById(R.id.graph);
