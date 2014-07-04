@@ -26,6 +26,7 @@ public class Stock extends SugarRecord<Stock> {
     public String marketCap;
     public int apiId;
     public String exchange;
+    public Category category;
 
     public Stock(Context c) {
         super(c);

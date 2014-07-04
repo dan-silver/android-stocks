@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,32 +29,43 @@ public class MyActivity extends FragmentActivity implements ActionBar.OnNavigati
     public static final String LOG_TAG = "STOCKS_LOG";
     public static final String API_URL = "http://104.131.249.221/";
     public static final int REQUEST_SEARCH_RESULT = 3;
+    CategorySpinnerAdapter categorySpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        assert getActionBar() != null;
-        ActionBar actionBar = getActionBar();
 //        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 //        getActionBar().hide();
 //        getApplicationContext().deleteDatabase("sugar_stocks.db");
         setContentView(R.layout.stocks);
+        assert getActionBar() != null;
+
+        ActionBar actionBar = getActionBar();
+        initNavSpinner(actionBar);
         populateDualPaneFragments();
         actionBar.setDisplayShowTitleEnabled(false);
-        initNavSpinner(actionBar);
         getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//        createSomeCategories();
+    }
 
+    private void createSomeCategories() {
+        (new Category(getApplicationContext(), "Tech Stocks")).save();
+        (new Category(getApplicationContext(), "Other Stocks")).save();
+    }
+
+    public Category getSelectedCategory() {
+        if (getActionBar() == null) return null;
+        int selectedIndex = getActionBar().getSelectedNavigationIndex();
+        return categorySpinnerAdapter.getItem(selectedIndex);
     }
 
     private void initNavSpinner(ActionBar actionBar) {
-        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.action_list, R.layout.actionbar_spinner_item);
-        actionBar.setListNavigationCallbacks(mSpinnerAdapter, new ActionBar.OnNavigationListener() {
-            String[] strings = getResources().getStringArray(R.array.action_list);
-
+        categorySpinnerAdapter = new CategorySpinnerAdapter
+                (this, R.layout.actionbar_spinner_item, Category.listAll(Category.class));
+        actionBar.setListNavigationCallbacks(categorySpinnerAdapter, new ActionBar.OnNavigationListener() {
             @Override
             public boolean onNavigationItemSelected(int position, long itemId) {
-                Log.v(MyActivity.LOG_TAG, strings[position]);
+                //update list of stocks to the selected category
                 return true;
             }
         });
